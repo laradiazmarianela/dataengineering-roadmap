@@ -538,14 +538,17 @@ SUB Rankmi_Total_Empleados_
         WHERE NOT IsNull([id]);
 
         // Limpia llaves técnicas para mantener solo campos del SELECT
-        FOR vIdx = NoOfFields('data_tmp') - 1 to 0 STEP -1
-            LET vFieldName = FieldName($(vIdx), 'data_tmp');
-            IF Index('$(vFieldName)', '__KEY') > 0
-               OR Index('$(vFieldName)', '__FK') > 0
-               OR Index('$(vFieldName)', '_response_header') > 0 THEN
-                DROP FIELD [$(vFieldName)] FROM [data_tmp];
-            ENDIF;
-        NEXT vIdx;
+        LET vTmpFieldCount = NoOfFields('data_tmp');
+        IF $(vTmpFieldCount) > 0 THEN
+            FOR vIdx = $(vTmpFieldCount) - 1 TO 0 STEP -1
+                LET vFieldName = FieldName($(vIdx), 'data_tmp');
+                IF Index('$(vFieldName)', '__KEY') > 0
+                   OR Index('$(vFieldName)', '__FK') > 0
+                   OR Index('$(vFieldName)', '_response_header') > 0 THEN
+                    DROP FIELD [$(vFieldName)] FROM [data_tmp];
+                ENDIF;
+            NEXT vIdx;
+        ENDIF;
 
         TRACE 'Filas en data_tmp antes de consolidar: ' & NoOfRows('data_tmp');
 
