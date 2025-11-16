@@ -1,0 +1,587 @@
+SUB Rankmi_Total_Empleados_
+
+    TRACE *** Iniciando carga de empleados Rankmi (todas las empresas) ***;
+    LIB CONNECT TO 'QA - Bronce - Script - Diversur - Latam:Rankmi_GET';
+
+    LET vURLEmployees = 'https://rankmi-api.rankmi.com/v1/payroll/employees';
+
+    LET vPage     = 1;
+    LET vPageSize = 100;
+    LET vRows     = 1;
+
+    IF TableNumber('Tabla_Empleados_Rankmi') >= 0 THEN
+        DROP TABLE Tabla_Empleados_Rankmi;
+    ENDIF;
+    LET vTablaCreada = 0;
+
+    DO WHILE $(vRows) > 0
+
+        TRACE *** Consultando página $(vPage) ***;
+
+        RestConnectorMasterTable:
+        SQL SELECT 
+            "__KEY__response_header",
+            (SELECT 
+                "id" AS "id_u34",
+                "admitted_at",
+                "afc_enrollment_at" AS "afc_enrollment_at_u0",
+                "affiliate" AS "affiliate_u0",
+                "company_email" AS "company_email_u0",
+                "company_id" AS "company_id_u0",
+                "feature_decoupling_vacations" AS "feature_decoupling_vacations_u1",
+                "foreign",
+                "latest_versioning_date",
+                "partner_administrator" AS "partner_administrator_u0",
+                "period_id" AS "period_id_u0",
+                "position_id",
+                "position_name",
+                "progressive_vacation_at",
+                "progressive_vacation_months",
+                "registra_asistencia",
+                "rehirable",
+                "signature_company_id",
+                "__KEY_data",
+                "__FK_data",
+                (SELECT 
+                    "id" AS "id_u0",
+                    "account_number",
+                    "account_validation",
+                    "currency",
+                    "type_account",
+                    "type_payment",
+                    "__KEY_bank_information",
+                    "__FK_bank_information",
+                    (SELECT 
+                        "id",
+                        "code",
+                        "name",
+                        "__FK_bank"
+                    FROM "bank" FK "__FK_bank")
+                FROM "bank_information" PK "__KEY_bank_information" FK "__FK_bank_information"),
+                (SELECT 
+                    "id" AS "id_u6",
+                    "atypical_regime",
+                    "base_salary",
+                    "branch_office_id",
+                    "code" AS "code_u3",
+                    "color_status",
+                    "commute_recurrence",
+                    "created_at" AS "created_at_current_contracts",
+                    "currency" AS "currency_u0",
+                    "current_version",
+                    "employee_id",
+                    "employment_protection_law",
+                    "exonerated_5ta",
+                    "external_reference",
+                    "feature_decoupling_vacations",
+                    "group_id",
+                    "hard_work",
+                    "has_settlement",
+                    "hours_week_four",
+                    "hours_week_one",
+                    "hours_week_three",
+                    "hours_week_two",
+                    "household_allowance",
+                    "imss_active",
+                    "is_global",
+                    "lunch_amount",
+                    "lunch_recurrence",
+                    "max_work",
+                    "nightwork",
+                    "number_hours",
+                    "organization_position_token",
+                    "original_contract_id",
+                    "parent_contract_id",
+                    "payment_frequency",
+                    "remote_work",
+                    "root_contract_id",
+                    "running_week",
+                    "senati",
+                    "send_movement",
+                    "sindicated",
+                    "started_at",
+                    "started_compensation_date",
+                    "started_recognited_at",
+                    "term",
+                    "top_uf",
+                    "top_years",
+                    "transportation_amount",
+                    "updated_at" AS "updated_at_current_contracts",
+                    "work_day",
+                    "work_day_classification",
+                    "work_days_per_week",
+                    "__KEY_current_contracts",
+                    "__FK_current_contracts",
+                    (SELECT 
+                        "id" AS "id_u2",
+                        "active",
+                        "annex_company",
+                        "code" AS "code_u0",
+                        "commercial_activity",
+                        "country_code",
+                        "country_name",
+                        "email",
+                        "family_walfare_fund_id",
+                        "gratification_payment",
+                        "identifier",
+                        "name" AS "name_u1",
+                        "previred_displayable_field",
+                        "sent_document_on_accept",
+                        "show_vacation_card",
+                        "subdomain_token",
+                        "token",
+                        "weekly_working_hours",
+                        "__KEY_company",
+                        "__FK_company",
+                        (SELECT 
+                            "id" AS "id_u1",
+                            "block_number",
+                            "location_id",
+                            "location_name",
+                            "street_name",
+                            "street_number",
+                            "__FK_address"
+                        FROM "address" FK "__FK_address"),
+                        (SELECT 
+                            "__KEY_legal_representative",
+                            "__FK_legal_representative",
+                            (SELECT 
+                                "rut",
+                                "name" AS "name_u0",
+                                "address",
+                                "lastname" AS "last_name_0",
+                                "second_name",
+                                "second_lastname",
+                                "__FK_0"
+                            FROM "0" FK "__FK_0")
+                        FROM "legal_representative" PK "__KEY_legal_representative" FK "__FK_legal_representative")
+                    FROM "company" PK "__KEY_company" FK "__FK_company"),
+                    (SELECT 
+                        "id" AS "id_u4",
+                        "percentage",
+                        "__KEY_cost_center_contracts",
+                        "__FK_cost_center_contracts",
+                        (SELECT 
+                            "id" AS "id_u3",
+                            "code" AS "code_u1",
+                            "country_code" AS "country_code_u0",
+                            "name" AS "name_u2",
+                            "reference" AS "reference_u0",
+                            "token" AS "token_u0",
+                            "__FK_cost_center"
+                        FROM "cost_center" FK "__FK_cost_center")
+                    FROM "cost_center_contracts" PK "__KEY_cost_center_contracts" FK "__FK_cost_center_contracts"),
+                    (SELECT 
+                        "years",
+                        "months",
+                        "days",
+                        "__FK_destructured_antiquity"
+                    FROM "destructured_antiquity" FK "__FK_destructured_antiquity"),
+                    (SELECT 
+                        "id" AS "id_u5",
+                        "code" AS "code_u2",
+                        "name" AS "name_u3",
+                        "token" AS "token_u1",
+                        "__FK_position"
+                    FROM "position" FK "__FK_position")
+                FROM "current_contracts" PK "__KEY_current_contracts" FK "__FK_current_contracts"),
+                (SELECT 
+                    "id" AS "id_u8",
+                    "aditional_amount",
+                    "aditional_symbol",
+                    "essalud_vida_pe",
+                    "fun",
+                    "sctr_salud_pe",
+                    "symbol",
+                    "value",
+                    "vida_ley_pe",
+                    "__KEY_employee_health_insurances",
+                    "__FK_employee_health_insurances",
+                    (SELECT 
+                        "id" AS "id_u7",
+                        "country_code" AS "country_code_u1",
+                        "name" AS "name_u4",
+                        "public",
+                        "system",
+                        "__FK_health_insurance"
+                    FROM "health_insurance" FK "__FK_health_insurance")
+                FROM "employee_health_insurances" PK "__KEY_employee_health_insurances" FK "__FK_employee_health_insurances"),
+                (SELECT 
+                    "id" AS "id_u10",
+                    "period_id",
+                    "sctr_pension_pe",
+                    "started_at" AS "started_at_u0",
+                    "__KEY_employee_pension_funds",
+                    "__FK_employee_pension_funds",
+                    (SELECT 
+                        "id" AS "id_u9",
+                        "code" AS "code_u4",
+                        "country_code" AS "country_code_u2",
+                        "name" AS "name_u5",
+                        "pension_scheme",
+                        "public" AS "public_u0",
+                        "__FK_pension_fund"
+                    FROM "pension_fund" FK "__FK_pension_fund")
+                FROM "employee_pension_funds" PK "__KEY_employee_pension_funds" FK "__FK_employee_pension_funds"),
+                (SELECT 
+                    "id" AS "id_u20",
+                    "atypical_regime" AS "atypical_regime_u0",
+                    "base_salary" AS "base_salary_u0",
+                    "branch_office_id" AS "branch_office_id_u0",
+                    "code" AS "code_u10",
+                    "color_status" AS "color_status_u0",
+                    "commute_recurrence" AS "commute_recurrence_u0",
+                    "created_at" AS "created_at_u1",
+                    "currency" AS "currency_u1",
+                    "current_version" AS "current_version_u0",
+                    "employee_id" AS "employee_id_u1",
+                    "employment_protection_law" AS "employment_protection_law_u0",
+                    "exonerated_5ta" AS "exonerated_5ta_u0",
+                    "external_reference" AS "external_reference_u0",
+                    "feature_decoupling_vacations" AS "feature_decoupling_vacations_u0",
+                    "group_id" AS "group_id_u0",
+                    "hard_work" AS "hard_work_u0",
+                    "has_settlement" AS "has_settlement_u0",
+                    "hours_week_four" AS "hours_week_four_u0",
+                    "hours_week_one" AS "hours_week_one_u0",
+                    "hours_week_three" AS "hours_week_three_u0",
+                    "hours_week_two" AS "hours_week_two_u0",
+                    "household_allowance" AS "household_allowance_u0",
+                    "imss_active" AS "imss_active_u0",
+                    "is_global" AS "is_global_u0",
+                    "lunch_amount" AS "lunch_amount_u0",
+                    "lunch_recurrence" AS "lunch_recurrence_u0",
+                    "max_work" AS "max_work_u0",
+                    "nightwork" AS "nightwork_u0",
+                    "number_hours" AS "number_hours_u0",
+                    "organization_position_token" AS "organization_position_token_u0",
+                    "original_contract_id" AS "original_contract_id_u0",
+                    "parent_contract_id" AS "parent_contract_id_u0",
+                    "payment_frequency" AS "payment_frequency_u0",
+                    "remote_work" AS "remote_work_u0",
+                    "root_contract_id" AS "root_contract_id_u0",
+                    "running_week" AS "running_week_u0",
+                    "senati" AS "senati_u0",
+                    "send_movement" AS "send_movement_u0",
+                    "sindicated" AS "sindicated_u0",
+                    "started_at" AS "started_at_u1",
+                    "started_compensation_date" AS "started_compensation_date_u0",
+                    "started_recognited_at" AS "started_recognited_at_u0",
+                    "term" AS "term_u0",
+                    "top_uf" AS "top_uf_u0",
+                    "top_years" AS "top_years_u0",
+                    "transportation_amount" AS "transportation_amount_u0",
+                    "updated_at" AS "updated_at_u1",
+                    "work_day" AS "work_day_u0",
+                    "work_day_classification" AS "work_day_classification_u0",
+                    "work_days_per_week" AS "work_days_per_week_u0",
+                    "__KEY_last_current_contract",
+                    "__FK_last_current_contract",
+                    (SELECT 
+                        "id" AS "id_u11",
+                        "code" AS "code_u5",
+                        "name" AS "name_u6",
+                        "parent_area_id",
+                        "__FK_area"
+                    FROM "area" FK "__FK_area"),
+                    (SELECT 
+                        "id" AS "id_u13",
+                        "active" AS "active_u0",
+                        "annex_company" AS "annex_company_u0",
+                        "code" AS "code_u6",
+                        "commercial_activity" AS "commercial_activity_u0",
+                        "country_code" AS "country_code_u3",
+                        "country_name" AS "country_name_u0",
+                        "email" AS "email_u0",
+                        "family_walfare_fund_id" AS "family_walfare_fund_id_u0",
+                        "gratification_payment" AS "gratification_payment_u0",
+                        "identifier" AS "identifier_u0",
+                        "mutual_additional_rate" AS "mutual_additional_rate_u0",
+                        "name" AS "name_u7",
+                        "previred_displayable_field" AS "previred_displayable_field_u0",
+                        "sent_document_on_accept" AS "sent_document_on_accept_u0",
+                        "show_vacation_card" AS "show_vacation_card_u0",
+                        "subdomain_token" AS "subdomain_token_u0",
+                        "token" AS "token_u2",
+                        "weekly_working_hours" AS "weekly_working_hours_u0",
+                        "__KEY_company_u0",
+                        "__FK_company_u0",
+                        (SELECT 
+                            "id" AS "id_u12",
+                            "block_number" AS "block_number_u0",
+                            "location_id" AS "location_id_u0",
+                            "location_name" AS "location_name_u0",
+                            "street_name" AS "street_name_u0",
+                            "street_number" AS "street_number_u0",
+                            "__FK_address_u0"
+                        FROM "address" FK "__FK_address_u0")
+                    FROM "company" PK "__KEY_company_u0" FK "__FK_company_u0"),
+                    (SELECT 
+                        "id" AS "id_u15",
+                        "percentage" AS "percentage_u0",
+                        "__KEY_cost_center_contracts_u0",
+                        "__FK_cost_center_contracts_u0",
+                        (SELECT 
+                            "id" AS "id_u14",
+                            "code" AS "code_u7",
+                            "country_code" AS "country_code_u4",
+                            "name" AS "name_u8",
+                            "reference" AS "reference_u2",
+                            "token" AS "token_u3",
+                            "__FK_cost_center_u0"
+                        FROM "cost_center" FK "__FK_cost_center_u0")
+                    FROM "cost_center_contracts" PK "__KEY_cost_center_contracts_u0" FK "__FK_cost_center_contracts_u0"),
+                    (SELECT 
+                        "years" AS "years_u0",
+                        "months" AS "months_u0",
+                        "days" AS "days_u0",
+                        "__FK_destructured_antiquity_u0"
+                    FROM "destructured_antiquity" FK "__FK_destructured_antiquity_u0"),
+                    (SELECT 
+                        "id" AS "id_u17",
+                        "afc_enrollment_at",
+                        "affiliate",
+                        "company_email",
+                        "partner_administrator",
+                        "__KEY_employee",
+                        "__FK_employee",
+                        (SELECT 
+                            "id" AS "id_u16",
+                            "age",
+                            "birthdate",
+                            "civil_status",
+                            "country_code" AS "country_code_u5",
+                            "created_at" AS "created_at_person",
+                            "document_issuing_country",
+                            "document_number",
+                            "document_type",
+                            "email" AS "email_u1",
+                            "employee_id" AS "employee_id_u0",
+                            "gender",
+                            "handicapped",
+                            "hirable",
+                            "identifier" AS "identifier_u1",
+                            "lastname" AS "lastname_person",
+                            "middle_name",
+                            "mothers_name",
+                            "name" AS "name_u9",
+                            "nationality",
+                            "retired_type",
+                            "rut" AS "rut_u0",
+                            "student",
+                            "telephone",
+                            "updated_at" AS "updated_at_person",
+                            "__KEY_person",
+                            "__FK_person"
+                        FROM "person" PK "__KEY_person" FK "__FK_person")
+                    FROM "employee" PK "__KEY_employee" FK "__FK_employee"),
+                    (SELECT 
+                        "id" AS "id_u18",
+                        "code" AS "code_u8",
+                        "country_code" AS "country_code_u6",
+                        "expired_payroll",
+                        "mailing_enabled",
+                        "name" AS "name_u10",
+                        "periodicity",
+                        "__KEY_group",
+                        "__FK_group"
+                    FROM "group" PK "__KEY_group" FK "__FK_group"),
+                    (SELECT 
+                        "id" AS "id_u19",
+                        "code" AS "code_u9",
+                        "name" AS "name_u11",
+                        "token" AS "token_u4",
+                        "__FK_position_u0"
+                    FROM "position" FK "__FK_position_u0")
+                FROM "last_current_contract" PK "__KEY_last_current_contract" FK "__FK_last_current_contract"),
+                (SELECT 
+                    "id" AS "id_u27",
+                    "age" AS "age_u0",
+                    "birthdate" AS "birthdate_u0",
+                    "civil_status" AS "civil_status_u0",
+                    "country_code" AS "country_code_u7",
+                    "created_at" AS "created_at_u2",
+                    "document_issuing_country" AS "document_issuing_country_u0",
+                    "document_number" AS "document_number_u0",
+                    "document_type" AS "document_type_u0",
+                    "email" AS "email_u3",
+                    "employee_id" AS "employee_id_u2",
+                    "gender" AS "gender_u0",
+                    "handicapped" AS "handicapped_u0",
+                    "hirable" AS "hirable_u0",
+                    "identifier" AS "identifier_u3",
+                    "lastname" AS "lastname_u1",
+                    "middle_name" AS "middle_name_u0",
+                    "mothers_name" AS "mothers_name_u0",
+                    "name" AS "name_u16",
+                    "nationality" AS "nationality_u0",
+                    "retired_type" AS "retired_type_u0",
+                    "rut" AS "rut_u1",
+                    "student" AS "student_u0",
+                    "subsidy" AS "subsidy_u0",
+                    "telephone" AS "telephone_u0",
+                    "updated_at" AS "updated_at_u2",
+                    "__KEY_person_u0",
+                    "__FK_person_u0",
+                    (SELECT 
+                        "id" AS "id_u21",
+                        "location_id" AS "location_id_u1",
+                        "location_name" AS "location_name_u1",
+                        "street_name" AS "street_name_u1",
+                        "street_number" AS "street_number_u1",
+                        "__FK_address_u1"
+                    FROM "address" FK "__FK_address_u1"),
+                    (SELECT 
+                        "id" AS "id_u22",
+                        "code" AS "code_u11",
+                        "name" AS "name_u12",
+                        "parent_area_id" AS "parent_area_id_u0",
+                        "__FK_area_u0"
+                    FROM "area" FK "__FK_area_u0"),
+                    (SELECT 
+                        "id" AS "id_u23",
+                        "code" AS "code_u12",
+                        "name" AS "name_u13",
+                        "token" AS "token_u5",
+                        "__FK_position_u1"
+                    FROM "position" FK "__FK_position_u1"),
+                    (SELECT 
+                        "id" AS "id_u24",
+                        "code" AS "code_u13",
+                        "name" AS "name_u14",
+                        "__FK_privacy"
+                    FROM "privacy" FK "__FK_privacy"),
+                    (SELECT 
+                        "id" AS "id_u26",
+                        "active" AS "active_u1",
+                        "country",
+                        "current_country",
+                        "email" AS "email_u2",
+                        "identifier" AS "identifier_u2",
+                        "joining_date",
+                        "lang",
+                        "locked",
+                        "permission_limit_days",
+                        "role_expires_at",
+                        "token" AS "token_u6",
+                        "username",
+                        "__KEY_user",
+                        "__FK_user",
+                        (SELECT 
+                            "id" AS "id_u25",
+                            "name" AS "name_u15",
+                            "__KEY_default_workspace",
+                            "__FK_default_workspace"
+                        FROM "default_workspace" PK "__KEY_default_workspace" FK "__FK_default_workspace")
+                    FROM "user" PK "__KEY_user" FK "__FK_user")
+                FROM "person" PK "__KEY_person_u0" FK "__FK_person_u0"),
+                (SELECT 
+                    "id" AS "id_u33",
+                    "access_app" AS "access_app_u0",
+                    "active" AS "active_u2",
+                    "country" AS "country_u0",
+                    "current_country" AS "current_country_u0",
+                    "full_name",
+                    "identifier" AS "identifier_u4",
+                    "joining_date" AS "joining_date_u0",
+                    "lang" AS "lang_u0",
+                    "lastname" AS "lastname_u2",
+                    "locked" AS "locked_u0",
+                    "name" AS "name_u22",
+                    "organization_id",
+                    "organization_name",
+                    "organization_token",
+                    "position_module",
+                    "token" AS "token_u8",
+                    "username" AS "username_u0",
+                    "__KEY_user_u0",
+                    "__FK_user_u0"
+                FROM "user" PK "__KEY_user_u0" FK "__FK_user_u0")
+            FROM (wrap off) "data" PK "__KEY_data" FK "__FK_data")
+        FROM JSON "_response_header" PK "__KEY__response_header"
+        WITH CONNECTION (
+            URL "$(vURLEmployees)?page=$(vPage)&pageSize=$(vPageSize)",
+            HTTPHEADER "Authorization" "$(vToken)"
+        );
+        LET vRows = NoOfRows('RestConnectorMasterTable');
+
+        IF $(vRows) = 0 THEN
+            TRACE *** Página $(vPage) sin registros--fin de la iteración ***;
+            DROP TABLE RestConnectorMasterTable;
+            EXIT DO;
+        ENDIF;
+
+        // Renombra todos los campos: sustituye '.' por '/', remueve 'data/'
+        LET vFieldCount = NoOfFields('RestConnectorMasterTable');
+        FOR vIdx = 0 TO $(vFieldCount) - 1
+            LET vOldName = FieldName($(vIdx), 'RestConnectorMasterTable');
+            IF Index('$(vOldName)', '_response_header') = 0 THEN
+                LET vNewName = Replace('$(vOldName)', '.', '/');
+                IF Left('$(vNewName)', 5) = 'data/' THEN
+                    LET vNewName = Mid('$(vNewName)', 6);
+                ENDIF;
+                IF Left('$(vNewName)', 24) = 'RestConnectorMasterTable/' THEN
+                    LET vNewName = Mid('$(vNewName)', 25);
+                ENDIF;
+                IF Len('$(vNewName)') > 0 THEN
+                    IF '$(vOldName)' <> '$(vNewName)' AND FieldNumber('$(vNewName)', 'RestConnectorMasterTable') = 0 THEN
+                        RENAME FIELD [$(vOldName)] TO [$(vNewName)];
+                    ENDIF;
+                ENDIF;
+            ENDIF;
+        NEXT vIdx;
+
+        // Tabla temporal con los datos de empleados (raw)
+        [data_tmp]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([id]);
+
+        // Limpia llaves técnicas para mantener solo campos del SELECT
+        LET vTmpFieldCount = NoOfFields('data_tmp');
+        IF $(vTmpFieldCount) > 0 THEN
+            FOR vIdx = $(vTmpFieldCount) - 1 TO 0 STEP -1
+                LET vFieldName = FieldName($(vIdx), 'data_tmp');
+                IF Index('$(vFieldName)', '__KEY') > 0
+                   OR Index('$(vFieldName)', '__FK') > 0
+                   OR Index('$(vFieldName)', '_response_header') > 0 THEN
+                    DROP FIELD [$(vFieldName)] FROM [data_tmp];
+                ENDIF;
+            NEXT vIdx;
+        ENDIF;
+
+        TRACE 'Filas en data_tmp antes de consolidar: ' & NoOfRows('data_tmp');
+
+        IF $(vTablaCreada) THEN
+            CONCATENATE (Tabla_Empleados_Rankmi)
+            LOAD *
+            RESIDENT [data_tmp];
+        ELSE
+            NOCONCATENATE
+            Tabla_Empleados_Rankmi:
+            LOAD *
+            RESIDENT [data_tmp];
+            LET vTablaCreada = 1;
+        ENDIF;
+
+        DROP TABLE [data_tmp];
+        DROP TABLE RestConnectorMasterTable;
+
+        LET vPage = $(vPage) + 1;
+
+    LOOP
+
+    IF $(vTablaCreada) THEN
+        TRACE 'Filas acumuladas en Tabla_Empleados_Rankmi: ' & NoOfRows('Tabla_Empleados_Rankmi');
+        TRACE 'Generando QVD raw sin transformaciones adicionales.';
+        STORE Tabla_Empleados_Rankmi INTO [lib://Bronce - Script - Rankmi - Diversur:DataFiles/Rankmi_Total_Empleados.qvd](qvd);
+        DROP TABLE Tabla_Empleados_Rankmi;
+        TRACE *** QVD Rankmi_Total_Empleados.qvd generado correctamente ***;
+    ELSE
+        TRACE *** No se generó información para Rankmi_Total_Empleados ***;
+    ENDIF;
+
+    TRACE *** Capa de extracción finalizada: sin LEFT JOIN, solo raw data ***;
+    DISCONNECT;
+
+END SUB
