@@ -524,8 +524,7 @@ SUB Rankmi_Total_Empleados_
                     LET vNewName = Mid('$(vNewName)', 25);
                 ENDIF;
                 IF Len('$(vNewName)') > 0 THEN
-                    IF '$(vOldName)' <> '$(vNewName)'
-                       AND FieldNumber('$(vNewName)', 'RestConnectorMasterTable') = 0 THEN
+                    IF '$(vOldName)' <> '$(vNewName)' AND FieldNumber('$(vNewName)', 'RestConnectorMasterTable') = 0 THEN
                         RENAME FIELD [$(vOldName)] TO [$(vNewName)];
                     ENDIF;
                 ENDIF;
