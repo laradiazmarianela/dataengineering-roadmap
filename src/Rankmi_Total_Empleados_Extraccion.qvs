@@ -523,8 +523,11 @@ SUB Rankmi_Total_Empleados_
                 IF Left('$(vNewName)', 24) = 'RestConnectorMasterTable/' THEN
                     LET vNewName = Mid('$(vNewName)', 25);
                 ENDIF;
-                IF Len('$(vNewName)') > 0 AND '$(vOldName)' <> '$(vNewName)' THEN
-                    RENAME FIELD [$(vOldName)] TO [$(vNewName)];
+                IF Len('$(vNewName)') > 0 THEN
+                    IF '$(vOldName)' <> '$(vNewName)'
+                       AND FieldNumber('$(vNewName)', 'RestConnectorMasterTable') = 0 THEN
+                        RENAME FIELD [$(vOldName)] TO [$(vNewName)];
+                    ENDIF;
                 ENDIF;
             ENDIF;
         NEXT vIdx;
