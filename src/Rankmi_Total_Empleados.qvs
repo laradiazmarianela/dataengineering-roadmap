@@ -520,6 +520,7 @@ SUB Rankmi_Total_Empleados
 
         data_tmp:
         LOAD
+            [__KEY__response_header],
             [id_u34],
             [admitted_at],
             [afc_enrollment_at_u0],
