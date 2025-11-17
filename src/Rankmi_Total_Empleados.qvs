@@ -520,27 +520,7 @@ SUB Rankmi_Total_Empleados
 
         data_tmp:
         LOAD
-            [__KEY__response_header],
-            [id_u34],
-            [admitted_at],
-            [afc_enrollment_at_u0],
-            [affiliate_u0],
-            [company_email_u0],
-            [company_id_u0],
-            [feature_decoupling_vacations_u1],
-            [foreign],
-            [latest_versioning_date],
-            [partner_administrator_u0],
-            [period_id_u0],
-            [position_id],
-            [position_name],
-            [progressive_vacation_at],
-            [progressive_vacation_months],
-            [registra_asistencia],
-            [rehirable],
-            [signature_company_id],
-            [__KEY_data],
-            [__FK_data]
+            *
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__KEY_data]);
 
@@ -555,24 +535,14 @@ SUB Rankmi_Total_Empleados
         // --- Bank information (empleado) ---
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u0],
-            [account_number],
-            [account_validation],
-            [currency],
-            [type_account],
-            [type_payment],
-            [__KEY_bank_information],
-            [__FK_bank_information],
+            *,
             [__FK_bank_information] AS [__KEY_data]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_bank_information]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id],
-            [code],
-            [name],
-            [__FK_bank],
+            *,
             [__FK_bank] AS [__KEY_bank_information]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_bank]);
@@ -580,59 +550,7 @@ SUB Rankmi_Total_Empleados
         // --- current_contracts ---
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u6],
-            [atypical_regime],
-            [base_salary],
-            [branch_office_id],
-            [code_u3],
-            [color_status],
-            [commute_recurrence],
-            [created_at_current_contracts],
-            [currency_u0],
-            [current_version],
-            [employee_id],
-            [employment_protection_law],
-            [exonerated_5ta],
-            [external_reference],
-            [feature_decoupling_vacations],
-            [group_id],
-            [hard_work],
-            [has_settlement],
-            [hours_week_four],
-            [hours_week_one],
-            [hours_week_three],
-            [hours_week_two],
-            [household_allowance],
-            [imss_active],
-            [is_global],
-            [lunch_amount],
-            [lunch_recurrence],
-            [max_work],
-            [nightwork],
-            [number_hours],
-            [organization_position_token],
-            [original_contract_id],
-            [parent_contract_id],
-            [payment_frequency],
-            [remote_work],
-            [root_contract_id],
-            [running_week],
-            [senati],
-            [send_movement],
-            [sindicated],
-            [started_at],
-            [started_compensation_date],
-            [started_recognited_at],
-            [term],
-            [top_uf],
-            [top_years],
-            [transportation_amount],
-            [updated_at_current_contracts],
-            [work_day],
-            [work_day_classification],
-            [work_days_per_week],
-            [__KEY_current_contracts],
-            [__FK_current_contracts],
+            *,
             [__FK_current_contracts] AS [__KEY_data]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_current_contracts]);
@@ -640,104 +558,56 @@ SUB Rankmi_Total_Empleados
         // --- company (current contract) ---
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u2],
-            [active],
-            [annex_company],
-            [code_u0],
-            [commercial_activity],
-            [country_code],
-            [country_name],
-            [email],
-            [family_walfare_fund_id],
-            [gratification_payment],
-            [identifier],
-            [name_u1],
-            [previred_displayable_field],
-            [sent_document_on_accept],
-            [show_vacation_card],
-            [subdomain_token],
-            [token],
-            [weekly_working_hours],
-            [__KEY_company],
-            [__FK_company],
+            *,
             [__FK_company] AS [__KEY_current_contracts]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_company]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u1],
-            [block_number],
-            [location_id],
-            [location_name],
-            [street_name],
-            [street_number],
-            [__FK_address],
+            *,
             [__FK_address] AS [__KEY_company]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_address]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [__KEY_legal_representative],
-            [__FK_legal_representative],
+            *,
             [__FK_legal_representative] AS [__KEY_company]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_legal_representative]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [rut],
-            [name_u0],
-            [address],
-            [last_name_0],
-            [second_name],
-            [second_lastname],
-            [__FK_0],
+            *,
             [__FK_0] AS [__KEY_legal_representative]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_0]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u4],
-            [percentage],
-            [__KEY_cost_center_contracts],
-            [__FK_cost_center_contracts],
+            *,
             [__FK_cost_center_contracts] AS [__KEY_current_contracts]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_cost_center_contracts]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u3],
-            [code_u1],
-            [country_code_u0],
-            [name_u2],
-            [reference_u0],
-            [token_u0],
-            [__FK_cost_center],
+            *,
             [__FK_cost_center] AS [__KEY_cost_center_contracts]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_cost_center]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [years],
-            [months],
-            [days],
-            [__FK_destructured_antiquity],
+            *,
             [__FK_destructured_antiquity] AS [__KEY_current_contracts]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_destructured_antiquity]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u5],
-            [code_u2],
-            [name_u3],
-            [token_u1],
-            [__FK_position],
+            *,
             [__FK_position] AS [__KEY_current_contracts]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_position]);
@@ -745,29 +615,14 @@ SUB Rankmi_Total_Empleados
         // --- employee_health_insurances ---
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u8],
-            [aditional_amount],
-            [aditional_symbol],
-            [essalud_vida_pe],
-            [fun],
-            [sctr_salud_pe],
-            [symbol],
-            [value],
-            [vida_ley_pe],
-            [__KEY_employee_health_insurances],
-            [__FK_employee_health_insurances],
+            *,
             [__FK_employee_health_insurances] AS [__KEY_data]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_employee_health_insurances]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u7],
-            [country_code_u1],
-            [name_u4],
-            [public],
-            [system],
-            [__FK_health_insurance],
+            *,
             [__FK_health_insurance] AS [__KEY_employee_health_insurances]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_health_insurance]);
@@ -775,240 +630,91 @@ SUB Rankmi_Total_Empleados
         // --- employee_pension_funds ---
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u10],
-            [period_id],
-            [sctr_pension_pe],
-            [started_at_u0],
-            [__KEY_employee_pension_funds],
-            [__FK_employee_pension_funds],
+            *,
             [__FK_employee_pension_funds] AS [__KEY_data]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_employee_pension_funds]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u9],
-            [code_u4],
-            [country_code_u2],
-            [name_u5],
-            [pension_scheme],
-            [public_u0],
-            [__FK_pension_fund],
+            *,
             [__FK_pension_fund] AS [__KEY_employee_pension_funds]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_pension_fund]);
         // --- last_current_contract ---
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u20],
-            [atypical_regime_u0],
-            [base_salary_u0],
-            [branch_office_id_u0],
-            [code_u10],
-            [color_status_u0],
-            [commute_recurrence_u0],
-            [created_at_u1],
-            [currency_u1],
-            [current_version_u0],
-            [employee_id_u1],
-            [employment_protection_law_u0],
-            [exonerated_5ta_u0],
-            [external_reference_u0],
-            [feature_decoupling_vacations_u0],
-            [group_id_u0],
-            [hard_work_u0],
-            [has_settlement_u0],
-            [hours_week_four_u0],
-            [hours_week_one_u0],
-            [hours_week_three_u0],
-            [hours_week_two_u0],
-            [household_allowance_u0],
-            [imss_active_u0],
-            [is_global_u0],
-            [lunch_amount_u0],
-            [lunch_recurrence_u0],
-            [max_work_u0],
-            [nightwork_u0],
-            [number_hours_u0],
-            [organization_position_token_u0],
-            [original_contract_id_u0],
-            [parent_contract_id_u0],
-            [payment_frequency_u0],
-            [remote_work_u0],
-            [root_contract_id_u0],
-            [running_week_u0],
-            [senati_u0],
-            [send_movement_u0],
-            [sindicated_u0],
-            [started_at_u1],
-            [started_compensation_date_u0],
-            [started_recognited_at_u0],
-            [term_u0],
-            [top_uf_u0],
-            [top_years_u0],
-            [transportation_amount_u0],
-            [updated_at_u1],
-            [work_day_u0],
-            [work_day_classification_u0],
-            [work_days_per_week_u0],
-            [__KEY_last_current_contract],
-            [__FK_last_current_contract],
+            *,
             [__FK_last_current_contract] AS [__KEY_data]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_last_current_contract]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u11],
-            [code_u5],
-            [name_u6],
-            [parent_area_id],
-            [__FK_area],
+            *,
             [__FK_area] AS [__KEY_last_current_contract]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_area]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u13],
-            [active_u0],
-            [annex_company_u0],
-            [code_u6],
-            [commercial_activity_u0],
-            [country_code_u3],
-            [country_name_u0],
-            [email_u0],
-            [family_walfare_fund_id_u0],
-            [gratification_payment_u0],
-            [identifier_u0],
-            [mutual_additional_rate_u0],
-            [name_u7],
-            [previred_displayable_field_u0],
-            [sent_document_on_accept_u0],
-            [show_vacation_card_u0],
-            [subdomain_token_u0],
-            [token_u2],
-            [weekly_working_hours_u0],
-            [__KEY_company_u0],
-            [__FK_company_u0],
+            *,
             [__FK_company_u0] AS [__KEY_last_current_contract]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_company_u0]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u12],
-            [block_number_u0],
-            [location_id_u0],
-            [location_name_u0],
-            [street_name_u0],
-            [street_number_u0],
-            [__FK_address_u0],
+            *,
             [__FK_address_u0] AS [__KEY_company_u0]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_address_u0]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u15],
-            [percentage_u0],
-            [__KEY_cost_center_contracts_u0],
-            [__FK_cost_center_contracts_u0],
+            *,
             [__FK_cost_center_contracts_u0] AS [__KEY_last_current_contract]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_cost_center_contracts_u0]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u14],
-            [code_u7],
-            [country_code_u4],
-            [name_u8],
-            [reference_u2],
-            [token_u3],
-            [__FK_cost_center_u0],
+            *,
             [__FK_cost_center_u0] AS [__KEY_cost_center_contracts_u0]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_cost_center_u0]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [years_u0],
-            [months_u0],
-            [days_u0],
-            [__FK_destructured_antiquity_u0],
+            *,
             [__FK_destructured_antiquity_u0] AS [__KEY_last_current_contract]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_destructured_antiquity_u0]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u17],
-            [afc_enrollment_at],
-            [affiliate],
-            [company_email],
-            [partner_administrator],
-            [__KEY_employee],
-            [__FK_employee],
+            *,
             [__FK_employee] AS [__KEY_last_current_contract]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_employee]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u16],
-            [age],
-            [birthdate],
-            [civil_status],
-            [country_code_u5],
-            [created_at_person],
-            [document_issuing_country],
-            [document_number],
-            [document_type],
-            [email_u1],
-            [employee_id_u0],
-            [gender],
-            [handicapped],
-            [hirable],
-            [identifier_u1],
-            [lastname_person],
-            [middle_name],
-            [mothers_name],
-            [name_u9],
-            [nationality],
-            [retired_type],
-            [rut_u0],
-            [student],
-            [telephone],
-            [updated_at_person],
-            [__KEY_person],
-            [__FK_person],
+            *,
             [__FK_person] AS [__KEY_employee]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_person]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u18],
-            [code_u8],
-            [country_code_u6],
-            [expired_payroll],
-            [mailing_enabled],
-            [name_u10],
-            [periodicity],
-            [__KEY_group],
-            [__FK_group],
+            *,
             [__FK_group] AS [__KEY_last_current_contract]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_group]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u19],
-            [code_u9],
-            [name_u11],
-            [token_u4],
-            [__FK_position_u0],
+            *,
             [__FK_position_u0] AS [__KEY_last_current_contract]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_position_u0]);
@@ -1016,78 +722,35 @@ SUB Rankmi_Total_Empleados
         // --- person (directo) ---
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u27],
-            [age_u0],
-            [birthdate_u0],
-            [civil_status_u0],
-            [country_code_u7],
-            [created_at_u2],
-            [document_issuing_country_u0],
-            [document_number_u0],
-            [document_type_u0],
-            [email_u3],
-            [employee_id_u2],
-            [gender_u0],
-            [handicapped_u0],
-            [hirable_u0],
-            [identifier_u3],
-            [lastname_u1],
-            [middle_name_u0],
-            [mothers_name_u0],
-            [name_u16],
-            [nationality_u0],
-            [retired_type_u0],
-            [rut_u1],
-            [student_u0],
-            [subsidy_u0],
-            [telephone_u0],
-            [updated_at_u2],
-            [__KEY_person_u0],
-            [__FK_person_u0],
+            *,
             [__FK_person_u0] AS [__KEY_data]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_person_u0]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u21],
-            [location_id_u1],
-            [location_name_u1],
-            [street_name_u1],
-            [street_number_u1],
-            [__FK_address_u1],
+            *,
             [__FK_address_u1] AS [__KEY_person_u0]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_address_u1]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u22],
-            [code_u11],
-            [name_u12],
-            [parent_area_id_u0],
-            [__FK_area_u0],
+            *,
             [__FK_area_u0] AS [__KEY_person_u0]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_area_u0]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u23],
-            [code_u12],
-            [name_u13],
-            [token_u5],
-            [__FK_position_u1],
+            *,
             [__FK_position_u1] AS [__KEY_person_u0]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_position_u1]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u24],
-            [code_u13],
-            [name_u14],
-            [__FK_privacy],
+            *,
             [__FK_privacy] AS [__KEY_person_u0]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_privacy]);
@@ -1095,31 +758,14 @@ SUB Rankmi_Total_Empleados
         // --- user (person) ---
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u26],
-            [active_u1],
-            [country],
-            [current_country],
-            [email_u2],
-            [identifier_u2],
-            [joining_date],
-            [lang],
-            [locked],
-            [permission_limit_days],
-            [role_expires_at],
-            [token_u6],
-            [username],
-            [__KEY_user],
-            [__FK_user],
+            *,
             [__FK_user] AS [__KEY_person_u0]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_user]);
 
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u25],
-            [name_u15],
-            [__KEY_default_workspace],
-            [__FK_default_workspace],
+            *,
             [__FK_default_workspace] AS [__KEY_user]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_default_workspace]);
@@ -1127,26 +773,7 @@ SUB Rankmi_Total_Empleados
         // --- user resumido (directo) ---
         LEFT JOIN ([data_tmp])
         LOAD
-            [id_u33],
-            [access_app_u0],
-            [active_u2],
-            [country_u0],
-            [current_country_u0],
-            [full_name],
-            [identifier_u4],
-            [joining_date_u0],
-            [lang_u0],
-            [lastname_u2],
-            [locked_u0],
-            [name_u22],
-            [organization_id],
-            [organization_name],
-            [organization_token],
-            [position_module],
-            [token_u8],
-            [username_u0],
-            [__KEY_user_u0],
-            [__FK_user_u0],
+            *,
             [__FK_user_u0] AS [__KEY_data]
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull([__FK_user_u0]);
