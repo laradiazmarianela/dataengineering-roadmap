@@ -17,6 +17,7 @@ AUTH_URL = "https://rankmi-api.rankmi.com/v1/auth"
 EMPLOYEES_URL = "https://rankmi-api.rankmi.com/v1/payroll/employees"
 DEFAULT_TIMEOUT = 30
 DEFAULT_PAGE_SIZE = 100
+TOKEN_KEYS = ("token", "accessToken", "jwt")
 
 # Reemplaza los strings siguientes con tu UID y secretKey reales y guarda el archivo.
 # Esto evita tener que pasar flags o variables de entorno cada vez.
@@ -54,7 +55,7 @@ class RankmiClient:
         response = self._session.post(AUTH_URL, params=params, timeout=self.timeout)
         response.raise_for_status()
         payload = response.json()
-        token = payload.get("token") or payload.get("accessToken") or payload.get("jwt")
+        token = find_token(payload)
         if not token:
             raise RankmiAuthError(
                 "No se encontro el token en la respuesta de autenticacion. "
@@ -139,6 +140,25 @@ def ensure_dict(item: Any) -> Dict[str, Any]:
     if isinstance(item, dict):
         return item
     return {"value": item}
+
+
+def find_token(payload: Any) -> Optional[str]:
+    """Busca recursivamente el token dentro del payload en los campos esperados."""
+    if isinstance(payload, dict):
+        for key in TOKEN_KEYS:
+            value = payload.get(key)
+            if isinstance(value, str) and value.strip():
+                return value
+        for value in payload.values():
+            nested = find_token(value)
+            if nested:
+                return nested
+    elif isinstance(payload, list):
+        for item in payload:
+            nested = find_token(item)
+            if nested:
+                return nested
+    return None
 
 
 def should_continue(
