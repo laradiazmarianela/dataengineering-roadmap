@@ -15,9 +15,9 @@
 Este repositorio incluye un script en `src/rankmi_employee_extractor.py` que realiza la autenticación y descarga paginada de empleados desde la API de Rankmi.
 
 1. Instala dependencias: `pip install -r requirements.txt`.
-2. Define tus credenciales (variables de entorno recomendadas):
-   - `export RANKMI_UID="tu_uid"`
-   - `export RANKMI_SECRET_KEY="tu_secret"`
+2. Define tus credenciales:
+   - Edita `HARDCODED_UID` y `HARDCODED_SECRET_KEY` dentro de `src/rankmi_employee_extractor.py`, o
+   - Exporta variables de entorno: `export RANKMI_UID="tu_uid"` y `export RANKMI_SECRET_KEY="tu_secret"`
 3. Ejecuta el extractor indicando filtros opcionales:
 
 ```bash

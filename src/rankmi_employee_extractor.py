@@ -18,6 +18,10 @@ EMPLOYEES_URL = "https://rankmi-api.rankmi.com/v1/payroll/employees"
 DEFAULT_TIMEOUT = 30
 DEFAULT_PAGE_SIZE = 200
 
+# Pega tus credenciales aqui si no quieres usar argumentos o variables de entorno.
+HARDCODED_UID = ""
+HARDCODED_SECRET_KEY = ""
+
 
 class RankmiAuthError(RuntimeError):
     """Error personalizado para fallos de autenticacion."""
@@ -164,13 +168,13 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--uid",
-        default=os.getenv("RANKMI_UID"),
-        help="UID provisto por Rankmi (o variable de entorno RANKMI_UID).",
+        default=HARDCODED_UID or os.getenv("RANKMI_UID"),
+        help="UID provisto por Rankmi (env RANKMI_UID o constante HARDCODED_UID).",
     )
     parser.add_argument(
         "--secret-key",
-        default=os.getenv("RANKMI_SECRET_KEY"),
-        help="Secret Key provista por Rankmi (o variable de entorno RANKMI_SECRET_KEY).",
+        default=HARDCODED_SECRET_KEY or os.getenv("RANKMI_SECRET_KEY"),
+        help="Secret Key provista por Rankmi (env RANKMI_SECRET_KEY o constante HARDCODED_SECRET_KEY).",
     )
     parser.add_argument(
         "--country",
@@ -213,7 +217,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     args = parser.parse_args(argv)
     if not args.uid or not args.secret_key:
         parser.error(
-            "Debes proporcionar --uid y --secret-key o definir RANKMI_UID y RANKMI_SECRET_KEY."
+            "Debes proporcionar --uid y --secret-key, definir las variables o editar HARDCODED_UID y HARDCODED_SECRET_KEY."
         )
     return args
 
