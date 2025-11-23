@@ -10,6 +10,30 @@
 
 <img align="center" alt="Roadmap illustration" src="./src/ROADMAP.png" />
 
+## ⚙️ Extracción de empleados desde Rankmi
+
+Este repositorio incluye un script en `src/rankmi_employee_extractor.py` que realiza la autenticación y descarga paginada de empleados desde la API de Rankmi.
+
+1. Instala dependencias: `pip install -r requirements.txt`.
+2. Define tus credenciales:
+   - Edita `HARDCODED_UID` y `HARDCODED_SECRET_KEY` dentro de `src/rankmi_employee_extractor.py`, o
+   - Exporta variables de entorno: `export RANKMI_UID="tu_uid"` y `export RANKMI_SECRET_KEY="tu_secret"`
+3. Ejecuta el extractor indicando filtros opcionales:
+
+```bash
+python src/rankmi_employee_extractor.py \
+  --country CL \
+  --page-size 200 \
+  --output empleados.jsonl
+```
+
+El script realiza:
+
+- `POST https://rankmi-api.rankmi.com/v1/auth` con `uid` y `secretKey` para obtener el token Bearer.
+- `GET https://rankmi-api.rankmi.com/v1/payroll/employees` con `page`, `pageSize` y `country` para descargar los registros.
+
+Cada empleado se guarda como JSON Lines (un registro por línea) en el archivo indicado o en `stdout` si usas `--output -`. Usa `--max-pages` para limitar la paginación o `--pretty` para un formato indentado durante la depuración.
+
 ## Programación
 
 ### 🚀 Fundamentos
