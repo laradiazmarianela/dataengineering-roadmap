@@ -16,11 +16,12 @@ import requests
 AUTH_URL = "https://rankmi-api.rankmi.com/v1/auth"
 EMPLOYEES_URL = "https://rankmi-api.rankmi.com/v1/payroll/employees"
 DEFAULT_TIMEOUT = 30
-DEFAULT_PAGE_SIZE = 200
+DEFAULT_PAGE_SIZE = 100
 
-# Pega tus credenciales aqui si no quieres usar argumentos o variables de entorno.
-HARDCODED_UID = ""
-HARDCODED_SECRET_KEY = ""
+# Reemplaza los strings siguientes con tu UID y secretKey reales y guarda el archivo.
+# Esto evita tener que pasar flags o variables de entorno cada vez.
+HARDCODED_UID = "PEGA_TU_UID_AQUI"
+HARDCODED_SECRET_KEY = "PEGA_TU_SECRET_KEY_AQUI"
 
 
 class RankmiAuthError(RuntimeError):
