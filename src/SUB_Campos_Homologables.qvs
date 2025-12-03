@@ -147,7 +147,7 @@ SUB SUB_Campos_Homologables
                             "__FK_person" AS "__FK_person_last"
                         FROM "person" PK "__KEY_person" FK "__FK_person")
                     FROM "employee" PK "__KEY_employee" FK "__FK_employee")
-                )
+                FROM "last_current_contract" PK "__KEY_last_current_contract" FK "__FK_last_current_contract")
             FROM (wrap off) "data" PK "__KEY_data" FK "__FK_data")
         FROM JSON "_response_header" PK "__KEY__response_header"
         WITH CONNECTION (
