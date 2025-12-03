@@ -33,7 +33,7 @@ SUB SUB_Contratos_Homologables
                 (SELECT 
                     "code",
                     "name",
-                    "__FK_area"
+                    "__FK_area" AS "__FK_area_contract"
                 FROM "area" FK "__FK_area"),
                 (SELECT 
                     "name" AS "name_u0",
@@ -111,7 +111,7 @@ SUB SUB_Contratos_Homologables
                     "id" AS "id_u11",
                     "code" AS "last_area_code_u5",
                     "name" AS "last_area_name_u6",
-                    "__FK_area"
+                    "__FK_area" AS "__FK_area_last"
                 FROM "area" FK "__FK_area")
             FROM (wrap off) "data" PK "__KEY_data" FK "__FK_data")
         FROM JSON "_response_header" PK "__KEY__response_header"
@@ -144,9 +144,9 @@ SUB SUB_Contratos_Homologables
         LOAD
             code AS area_code,
             name AS area_name,
-            __FK_area AS __KEY_data
+            __FK_area_contract AS __KEY_data
         RESIDENT RestConnectorMasterTable
-        WHERE NOT IsNull(__FK_area);
+        WHERE NOT IsNull(__FK_area_contract);
 
         ContractsCompany:
         LOAD
@@ -252,9 +252,9 @@ SUB SUB_Contratos_Homologables
             id_u11 AS last_area_id,
             last_area_code_u5 AS last_area_code,
             last_area_name_u6 AS last_area_name,
-            __FK_area AS __KEY_last_current_contract
+            __FK_area_last AS __KEY_last_current_contract
         RESIDENT RestConnectorMasterTable
-        WHERE NOT IsNull(__FK_area);
+        WHERE NOT IsNull(__FK_area_last);
 
         LastCostCenterContracts:
         LOAD
