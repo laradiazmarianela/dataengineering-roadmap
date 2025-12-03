@@ -260,10 +260,10 @@ SUB SUB_Contratos_Homologables
         LOAD
             id_u15 AS last_cost_center_contract_id,
             percentage_u0 AS last_cost_center_percentage,
-            __KEY_cost_center_contracts_u0,
-            __FK_cost_center_contracts_u0 AS __KEY_last_current_contract
+            __KEY_cost_center_contracts AS __KEY_cost_center_contracts_u0,
+            __FK_cost_center_contracts AS __KEY_last_current_contract
         RESIDENT RestConnectorMasterTable
-        WHERE NOT IsNull(__FK_cost_center_contracts_u0);
+        WHERE NOT IsNull(__FK_cost_center_contracts);
 
         LastCostCenter:
         LOAD
