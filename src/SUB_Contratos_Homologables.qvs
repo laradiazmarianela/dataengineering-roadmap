@@ -1,0 +1,962 @@
+SUB SUB_Contratos_Homologables
+    TRACE *** Iniciando carga Rankmi (contracts + last_current_contract) ***;
+    LIB CONNECT TO 'QA - Bronce - Script - Diversur - Latam:Rankmi_GET';
+
+    LET vURLContracts = 'https://rankmi-api.rankmi.com/v1/payroll/contracts';
+    LET vPage = 1;
+    LET vPageSize = 100;
+    LET vRows = -1;
+    LET vTablaCreada = 0;
+
+    DO WHILE vRows <> 0
+        TRACE *** Consultando pagina $(vPage) ***;
+
+        RestConnectorMasterTable:
+        SQL SELECT 
+            "__KEY__response_header",
+            (SELECT 
+                "id" AS "id_u22",
+                "anniversary_benefits_notification",
+                "assignment_date_basis",
+                "atypical_regime",
+                "base_salary",
+                "base_salary_contribution",
+                "bonus_days",
+                "branch_office_id",
+                "code" AS "code_u10",
+                "color_status",
+                "commute_recurrence",
+                "contract_ended_at",
+                "contract_started_at",
+                "contract_type",
+                "create_annex_for_anniversary",
+                "created_at" AS "created_at_u2",
+                "currency" AS "currency_u0",
+                "current_version",
+                "daily_salary",
+                "daily_salary_days",
+                "description" AS "description_u2",
+                "domiciled",
+                "education_level",
+                "employee_id",
+                "employer_registration",
+                "employer_registration_id" AS "employer_registration_id_u0",
+                "employment_protection_law",
+                "ended_at",
+                "establishment",
+                "exonerated_5ta",
+                "external_reference",
+                "feature_decoupling_vacations",
+                "fixed_earnings_taxed",
+                "group_id" AS "group_id_u0",
+                "hard_work",
+                "has_settlement",
+                "hiring_country",
+                "holiday_bonus",
+                "holidays",
+                "hours_week_four",
+                "hours_week_one",
+                "hours_week_three",
+                "hours_week_two",
+                "household_allowance",
+                "imss_active",
+                "imss_code_end",
+                "imss_ended_at",
+                "integrated_daily_salary",
+                "integration_factor",
+                "is_global",
+                "is_on_anniversary",
+                "labor_regime",
+                "learning_center",
+                "lunch_amount",
+                "lunch_recurrence",
+                "max_work",
+                "maximum_payment",
+                "milestone",
+                "mother_with_responsability",
+                "nightwork",
+                "number_hours",
+                "occupation_id",
+                "occupation_name",
+                "occupational_category",
+                "organization_position_token",
+                "original_contract_id",
+                "other_benefits_data",
+                "parent_contract_id",
+                "payment_frequency",
+                "payroll_extraction_at",
+                "period_type" AS "period_type_u0",
+                "position_cost",
+                "position_number",
+                "remote_work",
+                "renovated_at",
+                "root_contract_id",
+                "running_week",
+                "schedule",
+                "selected_table_for_benefits",
+                "senati",
+                "send_movement",
+                "show_annex_company_contract",
+                "sindicated",
+                "social_sec_salary_type",
+                "social_sec_workday",
+                "social_sec_workday_type",
+                "started_at" AS "started_at_u0",
+                "started_compensation_date",
+                "started_recognited_at",
+                "state_isn" AS "state_isn_u0",
+                "sunat_fdsa_benefits",
+                "sunat_other_incomes",
+                "sunat_worker_type_code",
+                "sunat_worker_type_code_humanize",
+                "tax_agreement",
+                "term",
+                "top_uf",
+                "top_years",
+                "transportation_amount",
+                "updated_at" AS "updated_at_u2",
+                "work_day",
+                "work_day_classification",
+                "work_days_per_week",
+                "worker_category",
+                "worker_status",
+                "worker_type",
+                "__KEY_data",
+                "__FK_data",
+                (SELECT 
+                    "@Value",
+                    "__FK_annex_company_contract"
+                FROM "annex_company_contract" FK "__FK_annex_company_contract" ArrayValueAlias "@Value"),
+                (SELECT 
+                    "id",
+                    "code",
+                    "description",
+                    "name",
+                    "parent_area_id",
+                    "__FK_area"
+                FROM "area" FK "__FK_area"),
+                (SELECT 
+                    "name" AS "name_u0",
+                    "identifier",
+                    "__FK_company"
+                FROM "company" FK "__FK_company"),
+                (SELECT 
+                    "id" AS "id_u1",
+                    "percentage",
+                    "__KEY_cost_center_contracts",
+                    "__FK_cost_center_contracts",
+                    (SELECT 
+                        "id" AS "id_u0",
+                        "code" AS "code_u0",
+                        "country_code",
+                        "description" AS "description_u0",
+                        "name" AS "name_u1",
+                        "parent_cost_center",
+                        "reference",
+                        "token",
+                        "__FK_cost_center"
+                    FROM "cost_center" FK "__FK_cost_center")
+                FROM "cost_center_contracts" PK "__KEY_cost_center_contracts" FK "__FK_cost_center_contracts"),
+                (SELECT 
+                    "years",
+                    "months",
+                    "days",
+                    "__FK_destructured_antiquity"
+                FROM "destructured_antiquity" FK "__FK_destructured_antiquity"),
+                (SELECT 
+                    "id" AS "id_u19",
+                    "afc_enrollment_at",
+                    "affiliate",
+                    "company_email",
+                    "company_id",
+                    "cts_information",
+                    "cuispp_pe",
+                    "essalud_assistance_center_indicator",
+                    "family_allowance_tranche",
+                    "partner_administrator",
+                    "position_id",
+                    "position_name",
+                    "rehirable",
+                    "sctr_ies_indicator",
+                    "sctr_ies_rate",
+                    "signature_company_id",
+                    "__KEY_employee",
+                    "__FK_employee",
+                    (SELECT 
+                        "id" AS "id_u3",
+                        "account_number",
+                        "account_number_interbank",
+                        "account_validation",
+                        "company_code",
+                        "company_service",
+                        "currency",
+                        "layout_bank_information",
+                        "type_account",
+                        "type_payment",
+                        "__KEY_bank_information",
+                        "__FK_bank_information",
+                        (SELECT 
+                            "id" AS "id_u2",
+                            "code" AS "code_u1",
+                            "name" AS "name_u2",
+                            "__FK_bank"
+                        FROM "bank" FK "__FK_bank")
+                    FROM "bank_information" PK "__KEY_bank_information" FK "__FK_bank_information"),
+                    (SELECT 
+                        "id" AS "id_u5",
+                        "aditional_amount",
+                        "aditional_symbol",
+                        "essalud_vida_pe",
+                        "fun",
+                        "policy_type",
+                        "sctr_salud_pe",
+                        "sunat_health_insurance_regime",
+                        "symbol",
+                        "value",
+                        "vida_ley_pe",
+                        "__KEY_employee_health_insurances",
+                        "__FK_employee_health_insurances",
+                        (SELECT 
+                            "id" AS "id_u4",
+                            "country_code" AS "country_code_u0",
+                            "name" AS "name_u3",
+                            "public",
+                            "system",
+                            "__FK_health_insurance"
+                        FROM "health_insurance" FK "__FK_health_insurance")
+                    FROM "employee_health_insurances" PK "__KEY_employee_health_insurances" FK "__FK_employee_health_insurances"),
+                    (SELECT 
+                        "id" AS "id_u8",
+                        "commission_type",
+                        "membership_at",
+                        "sctr_pension_pe",
+                        "started_at",
+                        "voluntary_pension_saving",
+                        "voluntary_pension_saving_account",
+                        "__KEY_employee_pension_funds",
+                        "__FK_employee_pension_funds",
+                        (SELECT 
+                            "id" AS "id_u6",
+                            "code" AS "code_u2",
+                            "country_code" AS "country_code_u1",
+                            "name" AS "name_u4",
+                            "pension_scheme",
+                            "public" AS "public_u0",
+                            "reduced_rate",
+                            "__FK_pension_fund"
+                        FROM "pension_fund" FK "__FK_pension_fund"),
+                        (SELECT 
+                            "id" AS "id_u7",
+                            "created_at",
+                            "symbol" AS "symbol_u0",
+                            "updated_at",
+                            "value" AS "value_u0",
+                            "__FK_voluntary_pension_saving_account"
+                        FROM "voluntary_pension_saving_account" FK "__FK_voluntary_pension_saving_account")
+                    FROM "employee_pension_funds" PK "__KEY_employee_pension_funds" FK "__FK_employee_pension_funds"),
+                    (SELECT 
+                        "id" AS "id_u12",
+                        "academic_document_reference",
+                        "academic_document_type",
+                        "academic_level",
+                        "age",
+                        "allergy",
+                        "another_exception_type",
+                        "avatar_url",
+                        "biography",
+                        "birthdate",
+                        "birthplace",
+                        "blood_type",
+                        "career",
+                        "cell_number",
+                        "civil_status",
+                        "country_code" AS "country_code_u2",
+                        "created_at" AS "created_at_u0",
+                        "curp",
+                        "current_career",
+                        "current_school",
+                        "direct_manager",
+                        "document_issuing_country",
+                        "document_number",
+                        "document_type",
+                        "email",
+                        "fonacot_data",
+                        "gender",
+                        "graduation_year",
+                        "handicapped",
+                        "hirable",
+                        "identifier" AS "identifier_u0",
+                        "infonavit_data",
+                        "lastname",
+                        "middle_name",
+                        "mothers_name",
+                        "name" AS "name_u8",
+                        "nationality",
+                        "nss",
+                        "retired_type",
+                        "rut",
+                        "school",
+                        "school_schedule",
+                        "student",
+                        "subsidy",
+                        "tax_name",
+                        "tax_postal_code",
+                        "tax_regime",
+                        "telephone",
+                        "telephone_city_code",
+                        "updated_at" AS "updated_at_u0",
+                        "__KEY_person",
+                        "__FK_person",
+                        (SELECT 
+                            "id" AS "id_u9",
+                            "code" AS "code_u3",
+                            "description" AS "description_u1",
+                            "name" AS "name_u5",
+                            "parent_area_id" AS "parent_area_id_u0",
+                            "__FK_area_u0"
+                        FROM "area" FK "__FK_area_u0"),
+                        (SELECT 
+                            "__FK_errors"
+                        FROM "errors" FK "__FK_errors"),
+                        (SELECT 
+                            "id" AS "id_u10",
+                            "code" AS "code_u4",
+                            "name" AS "name_u6",
+                            "parent_position_id",
+                            "token" AS "token_u0",
+                            "__FK_position"
+                        FROM "position" FK "__FK_position"),
+                        (SELECT 
+                            "id" AS "id_u11",
+                            "code" AS "code_u5",
+                            "name" AS "name_u7",
+                            "__FK_privacy"
+                        FROM "privacy" FK "__FK_privacy")
+                    FROM "person" PK "__KEY_person" FK "__FK_person"),
+                    (SELECT 
+                        "id" AS "id_u18",
+                        "access_app" AS "access_app_u0",
+                        "active",
+                        "country",
+                        "current_country",
+                        "full_name",
+                        "identifier" AS "identifier_u1",
+                        "joining_date",
+                        "lang",
+                        "lastname" AS "lastname_u0",
+                        "locked",
+                        "name" AS "name_u14",
+                        "organization_id",
+                        "organization_name",
+                        "organization_token",
+                        "position_module",
+                        "token" AS "token_u2",
+                        "username",
+                        "__KEY_user",
+                        "__FK_user",
+                        (SELECT 
+                            "id" AS "id_u13",
+                            "code" AS "code_u6",
+                            "collaborators_count",
+                            "max_capacity",
+                            "name" AS "name_u9",
+                            "standard_hours",
+                            "status",
+                            "token" AS "token_u1",
+                            "__KEY_organization_position",
+                            "__FK_organization_position",
+                            (SELECT 
+                                "advanced_configuration_id",
+                                "state_isn",
+                                "group_id",
+                                "period_type",
+                                "employer_registration_id",
+                                "stamp_interface_id",
+                                "__FK_payroll_fields_as_json"
+                            FROM "payroll_fields_as_json" FK "__FK_payroll_fields_as_json")
+                        FROM "organization_position" PK "__KEY_organization_position" FK "__FK_organization_position"),
+                        (SELECT 
+                            "id" AS "id_u16",
+                            "access_app",
+                            "name" AS "name_u12",
+                            "__KEY_role",
+                            "__FK_role",
+                            (SELECT 
+                                "@Value" AS "@Value_u0",
+                                "__FK_permitted_approval_payroll_options"
+                            FROM "permitted_approval_payroll_options" FK "__FK_permitted_approval_payroll_options" ArrayValueAlias "@Value_u0"),
+                            (SELECT 
+                                "id" AS "id_u14",
+                                "code" AS "code_u7",
+                                "country_code" AS "country_code_u3",
+                                "created_at" AS "created_at_u1",
+                                "name" AS "name_u10",
+                                "payment_label",
+                                "related",
+                                "related_at",
+                                "report_template_id",
+                                "tempo",
+                                "updated_at" AS "updated_at_u1",
+                                "stamp_strategy",
+                                "skip_totalizator_callback",
+                                "__KEY_permitted_payroll_types",
+                                "__FK_permitted_payroll_types",
+                                (SELECT 
+                                    "stamping",
+                                    "dispersion",
+                                    "move_payrolls",
+                                    "__FK_configurations"
+                                FROM "configurations" FK "__FK_configurations"),
+                                (SELECT 
+                                    "@Value" AS "@Value_u1",
+                                    "__FK_months_applies"
+                                FROM "months_applies" FK "__FK_months_applies" ArrayValueAlias "@Value_u1")
+                            FROM "permitted_payroll_types" PK "__KEY_permitted_payroll_types" FK "__FK_permitted_payroll_types"),
+                            (SELECT 
+                                "id" AS "id_u15",
+                                "name" AS "name_u11",
+                                "permission",
+                                "role_id",
+                                "section",
+                                "__FK_role_permissions"
+                            FROM "role_permissions" FK "__FK_role_permissions")
+                        FROM "role" PK "__KEY_role" FK "__FK_role"),
+                        (SELECT 
+                            "id" AS "id_u17",
+                            "name" AS "name_u13",
+                            "__KEY_workspaces",
+                            "__FK_workspaces",
+                            (SELECT 
+                                "__KEY_filters",
+                                "__FK_filters",
+                                (SELECT 
+                                    "m" AS "m_u0",
+                                    "__KEY_group",
+                                    "__FK_group",
+                                    (SELECT 
+                                        "m",
+                                        "__KEY_g",
+                                        "__FK_g",
+                                        (SELECT 
+                                            "@Value" AS "@Value_u2",
+                                            "__FK_group_id_in"
+                                        FROM "group_id_in" FK "__FK_group_id_in" ArrayValueAlias "@Value_u2")
+                                    FROM "g" PK "__KEY_g" FK "__FK_g")
+                                FROM "group" PK "__KEY_group" FK "__FK_group"),
+                                (SELECT 
+                                    "m" AS "m_u2",
+                                    "__KEY_privacy",
+                                    "__FK_privacy_u0",
+                                    (SELECT 
+                                        "m" AS "m_u1",
+                                        "__KEY_g_u0",
+                                        "__FK_g_u0",
+                                        (SELECT 
+                                            "@Value" AS "@Value_u3",
+                                            "__FK_privacy_id_in"
+                                        FROM "privacy_id_in" FK "__FK_privacy_id_in" ArrayValueAlias "@Value_u3")
+                                    FROM "g" PK "__KEY_g_u0" FK "__FK_g_u0")
+                                FROM "privacy" PK "__KEY_privacy" FK "__FK_privacy_u0")
+                            FROM "filters" PK "__KEY_filters" FK "__FK_filters")
+                        FROM "workspaces" PK "__KEY_workspaces" FK "__FK_workspaces")
+                FROM "user" PK "__KEY_user" FK "__FK_user")
+            FROM (wrap off) "data" PK "__KEY_data" FK "__FK_data")
+        FROM JSON "_response_header" PK "__KEY__response_header"
+        WITH CONNECTION (
+            URL "$(vURLContracts)?page=$(vPage)&pageSize=$(vPageSize)",
+            HTTPHEADER "Authorization" "$(vToken)"
+        );
+
+        [contracts_data_raw]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_data);
+
+        [annex_company_contract]:
+        LOAD
+            [@Value] AS annex_company_contract_value,
+            [__FK_annex_company_contract] AS __KEY_data
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_annex_company_contract]);
+
+        [contract_area]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_area]);
+
+        [contract_company]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_company]);
+
+        [contract_cost_center_contracts]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_cost_center_contracts]);
+
+        [contract_cost_center]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_cost_center]);
+
+        [destructured_antiquity]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_destructured_antiquity]);
+
+        [contract_group_u0]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_group_u0]);
+
+        [contract_metadata]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_metadata]);
+
+        [contract_privacies]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_privacies]);
+
+        [contract_position_u0]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_position_u0]);
+
+        [contract_rfc_data]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_rfc_data]);
+
+        [contract_vacation_type_ids]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_vacation_type_ids]);
+
+        [contract_work_days]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_work_days]);
+
+        [contract_working_days]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_working_days]);
+
+        [employee]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_employee]);
+
+        [employee_bank_information]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_bank_information]);
+
+        [bank]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_bank]);
+
+        [employee_health_insurances]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_employee_health_insurances]);
+
+        [health_insurance]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_health_insurance]);
+
+        [employee_pension_funds]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_employee_pension_funds]);
+
+        [pension_fund]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_pension_fund]);
+
+        [voluntary_pension_saving_account]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_voluntary_pension_saving_account]);
+
+        [person]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_person]);
+
+        [person_area]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_area_u0]);
+
+        [person_errors]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_errors]);
+
+        [person_position]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_position]);
+
+        [person_privacy]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_privacy]);
+
+        [user]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_user]);
+
+        [organization_position]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_organization_position]);
+
+        [payroll_fields_as_json]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_payroll_fields_as_json]);
+
+        [role]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_role]);
+
+        [permitted_approval_payroll_options]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_permitted_approval_payroll_options]);
+
+        [permitted_payroll_types]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_permitted_payroll_types]);
+
+        [payroll_configurations]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_configurations]);
+
+        [payroll_months_applies]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_months_applies]);
+
+        [role_permissions]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_role_permissions]);
+
+        [workspaces]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_workspaces]);
+
+        [workspace_filters]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_filters]);
+
+        [workspace_group]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_group]);
+
+        [workspace_group_nested]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_g]);
+
+        [workspace_group_id_in]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_group_id_in]);
+
+        [workspace_privacy]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_privacy_u0]);
+
+        [workspace_privacy_nested]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_g_u0]);
+
+        [workspace_privacy_id_in]:
+        LOAD *
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull([__FK_privacy_id_in]);
+
+        DROP TABLE RestConnectorMasterTable;
+
+        ContractsBatch:
+        NoConcatenate
+        LOAD *
+        RESIDENT [contracts_data_raw]
+        WHERE Len(Trim(id_u22)) > 0;
+        DROP TABLE [contracts_data_raw];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [annex_company_contract];
+        DROP TABLE [annex_company_contract];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_area];
+        DROP TABLE [contract_area];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_company];
+        DROP TABLE [contract_company];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_cost_center_contracts];
+        DROP TABLE [contract_cost_center_contracts];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_cost_center];
+        DROP TABLE [contract_cost_center];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [destructured_antiquity];
+        DROP TABLE [destructured_antiquity];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_group_u0];
+        DROP TABLE [contract_group_u0];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_metadata];
+        DROP TABLE [contract_metadata];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_privacies];
+        DROP TABLE [contract_privacies];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_position_u0];
+        DROP TABLE [contract_position_u0];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_rfc_data];
+        DROP TABLE [contract_rfc_data];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_vacation_type_ids];
+        DROP TABLE [contract_vacation_type_ids];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_work_days];
+        DROP TABLE [contract_work_days];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [contract_working_days];
+        DROP TABLE [contract_working_days];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [employee];
+        DROP TABLE [employee];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [employee_bank_information];
+        DROP TABLE [employee_bank_information];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [bank];
+        DROP TABLE [bank];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [employee_health_insurances];
+        DROP TABLE [employee_health_insurances];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [health_insurance];
+        DROP TABLE [health_insurance];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [employee_pension_funds];
+        DROP TABLE [employee_pension_funds];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [pension_fund];
+        DROP TABLE [pension_fund];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [voluntary_pension_saving_account];
+        DROP TABLE [voluntary_pension_saving_account];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [person];
+        DROP TABLE [person];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [person_area];
+        DROP TABLE [person_area];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [person_errors];
+        DROP TABLE [person_errors];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [person_position];
+        DROP TABLE [person_position];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [person_privacy];
+        DROP TABLE [person_privacy];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [user];
+        DROP TABLE [user];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [organization_position];
+        DROP TABLE [organization_position];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [payroll_fields_as_json];
+        DROP TABLE [payroll_fields_as_json];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [role];
+        DROP TABLE [role];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [permitted_approval_payroll_options];
+        DROP TABLE [permitted_approval_payroll_options];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [permitted_payroll_types];
+        DROP TABLE [permitted_payroll_types];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [payroll_configurations];
+        DROP TABLE [payroll_configurations];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [payroll_months_applies];
+        DROP TABLE [payroll_months_applies];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [role_permissions];
+        DROP TABLE [role_permissions];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [workspaces];
+        DROP TABLE [workspaces];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [workspace_filters];
+        DROP TABLE [workspace_filters];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [workspace_group];
+        DROP TABLE [workspace_group];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [workspace_group_nested];
+        DROP TABLE [workspace_group_nested];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [workspace_group_id_in];
+        DROP TABLE [workspace_group_id_in];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [workspace_privacy];
+        DROP TABLE [workspace_privacy];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [workspace_privacy_nested];
+        DROP TABLE [workspace_privacy_nested];
+
+        LEFT JOIN (ContractsBatch)
+        LOAD *
+        RESIDENT [workspace_privacy_id_in];
+        DROP TABLE [workspace_privacy_id_in];
+
+        IF FieldNumber('__KEY_data','ContractsBatch') > 0 THEN
+            DROP FIELD __KEY_data FROM ContractsBatch;
+        ENDIF
+        IF FieldNumber('__FK_data','ContractsBatch') > 0 THEN
+            DROP FIELD __FK_data FROM ContractsBatch;
+        ENDIF
+
+        LET vRows = NoOfRows('ContractsBatch');
+
+        IF vRows = 0 THEN
+            DROP TABLE ContractsBatch;
+        ELSE
+            IF vTablaCreada = 0 THEN
+                ContractsHomologables:
+                NoConcatenate
+                LOAD * RESIDENT ContractsBatch;
+                LET vTablaCreada = 1;
+            ELSE
+                CONCATENATE (ContractsHomologables)
+                LOAD * RESIDENT ContractsBatch;
+            ENDIF
+
+            DROP TABLE ContractsBatch;
+            LET vPage = vPage + 1;
+        ENDIF
+    LOOP
+
+    IF vTablaCreada = 1 THEN
+        STORE ContractsHomologables INTO [lib://Bronce - Script - Rankmi - Diversur:DataFiles/Contracts_Campos_Homologables.qvd] (qvd);
+        DROP TABLE ContractsHomologables;
+        TRACE *** Contratos Rankmi guardados en QVD ***;
+    ELSE
+        TRACE *** No se recibieron datos de contratos Rankmi ***;
+    ENDIF
+
+    DISCONNECT;
+END SUB
