@@ -1,0 +1,567 @@
+SUB SUB_Campos_Homologables
+    TRACE *** Iniciando carga Rankmi (contracts + last_current_contract) ***;
+    LIB CONNECT TO 'QA - Bronce - Script - Diversur - Latam:Rankmi_GET';
+
+    LET vURLContracts = 'https://rankmi-api.rankmi.com/v1/payroll/contracts';
+    LET vPage = 2;
+    LET vPageSize = 100;
+    LET vRows = -1;
+    LET vTablaCreada = 0;
+
+    DO WHILE vRows <> 0
+        TRACE *** Consultando pagina $(vPage) ***;
+
+        RestConnectorMasterTable:
+        SQL SELECT 
+            "__KEY__response_header",
+            (SELECT 
+                "id" AS "id_u22",
+                "base_salary",
+                "branch_office_id",
+                "code" AS "code_u10",
+                "color_status",
+                "current_version",
+                "employee_id",
+                "ended_at",
+                "number_hours",
+                "progressive_vacation_at",
+                "progressive_vacation_months",
+                "sindicated",
+                "term",
+                "__KEY_data",
+                "__FK_data",
+                (SELECT 
+                    "code",
+                    "name",
+                    "__FK_area" AS "__FK_area_contract"
+                FROM "area" FK "__FK_area"),
+                (SELECT 
+                    "name" AS "name_u0",
+                    "identifier",
+                    "__FK_company"
+                FROM "company" FK "__FK_company"),
+                (SELECT 
+                    "percentage",
+                    "__KEY_cost_center_contracts",
+                    "__FK_cost_center_contracts",
+                    (SELECT 
+                        "name" AS "name_u1",
+                        "reference",
+                        "__FK_cost_center" AS "__FK_cost_center_contract"
+                    FROM "cost_center" FK "__FK_cost_center")
+                FROM "cost_center_contracts" PK "__KEY_cost_center_contracts" FK "__FK_cost_center_contracts"),
+                (SELECT 
+                    "company_email",
+                    "position_id",
+                    "position_name",
+                    "__KEY_employee" AS "__KEY_employee_contract",
+                    "__FK_employee" AS "__FK_employee_contract",
+                    (SELECT 
+                        "birthdate",
+                        "civil_status",
+                        "document_issuing_country",
+                        "document_type",
+                        "email" AS "email_u0",
+                        "gender",
+                        "identifier" AS "identifier_u0",
+                        "lastname",
+                        "middle_name",
+                        "mothers_name",
+                        "name" AS "name_u8",
+                        "nationality",
+                        "retired_type",
+                        "__KEY_person" AS "__KEY_person_contract",
+                        "__FK_person" AS "__FK_person_contract",
+                        (SELECT 
+                            "code" AS "code_u3",
+                            "name" AS "name_u5",
+                            "__FK_area_u0" AS "__FK_area_person_contract"
+                        FROM "area" FK "__FK_area_u0"),
+                        (SELECT 
+                            "code" AS "privacy_code_u5",
+                            "name" AS "privacy_name_u7",
+                            "__FK_privacy" AS "__FK_privacy_contract"
+                        FROM "privacy" FK "__FK_privacy")
+                    FROM "person" PK "__KEY_person" FK "__FK_person"),
+                    (SELECT 
+                        "active",
+                        "current_country",
+                        "joining_date",
+                        "username",
+                        "__KEY_user" AS "__KEY_user_contract",
+                        "__FK_user" AS "__FK_user_contract"
+                    FROM "user" PK "__KEY_user" FK "__FK_user")
+                FROM "employee" PK "__KEY_employee" FK "__FK_employee"),
+                (SELECT 
+                    "id" AS "id_u20",
+                    "base_salary" AS "base_salary_u0",
+                    "color_status" AS "color_status_u0",
+                    "created_at" AS "created_at_u1",
+                    "currency" AS "currency_u1",
+                    "description" AS "description_u3",
+                    "employee_id" AS "employee_id_u1",
+                    "number_hours" AS "number_hours_u0",
+                    "sindicated" AS "sindicated_u0",
+                    "started_at" AS "started_at_u1",
+                    "term" AS "term_u0",
+                    "__KEY_last_current_contract",
+                    "__FK_last_current_contract",
+                    (SELECT 
+                        "id" AS "last_area_id",
+                        "code" AS "last_area_code_u5",
+                        "name" AS "last_area_name_u6",
+                        "__FK_area" AS "__FK_area_last"
+                    FROM "area" FK "__FK_area"),
+                    (SELECT 
+                        "percentage" AS "percentage_u0",
+                        "__KEY_cost_center_contracts" AS "__KEY_cost_center_contracts_last",
+                        "__FK_cost_center_contracts" AS "__FK_cost_center_contracts_last",
+                        (SELECT 
+                            "id" AS "last_cost_center_id",
+                            "code" AS "last_cost_center_code",
+                            "country_code" AS "last_cost_center_country",
+                            "name" AS "last_cost_center_name",
+                            "reference" AS "last_cost_center_reference",
+                            "__FK_cost_center" AS "__FK_cost_center_last"
+                        FROM "cost_center" FK "__FK_cost_center")
+                    FROM "cost_center_contracts" PK "__KEY_cost_center_contracts" FK "__FK_cost_center_contracts"),
+                    (SELECT 
+                        "id" AS "last_employee_id_u0",
+                        "company_email" AS "last_employee_email_u0",
+                        "__KEY_employee" AS "__KEY_employee_last",
+                        "__FK_employee" AS "__FK_employee_last",
+                        (SELECT 
+                            "id" AS "last_person_id_u0",
+                            "birthdate" AS "last_person_birthdate_u0",
+                            "civil_status" AS "last_person_civil_status_u0",
+                            "document_issuing_country" AS "last_person_document_country_u0",
+                            "document_type" AS "last_person_document_type_u0",
+                            "email" AS "last_person_email_u0",
+                            "gender" AS "last_person_gender_u0",
+                            "identifier" AS "last_person_identifier_u0",
+                            "lastname" AS "last_person_lastname_u0",
+                            "middle_name" AS "last_person_middle_name_u0",
+                            "mothers_name" AS "last_person_mothers_name_u0",
+                            "name" AS "last_person_name_u0",
+                            "nationality" AS "last_person_nationality_u0",
+                            "__FK_person" AS "__FK_person_last"
+                        FROM "person" PK "__KEY_person" FK "__FK_person")
+                    FROM "employee" PK "__KEY_employee" FK "__FK_employee")
+                )
+            FROM (wrap off) "data" PK "__KEY_data" FK "__FK_data")
+        FROM JSON "_response_header" PK "__KEY__response_header"
+        WITH CONNECTION (
+            URL "$(vURLContracts)?page=$(vPage)&pageSize=$(vPageSize)",
+            HTTPHEADER "Authorization" "$(vToken)"
+        );
+
+        [data]:
+        LOAD
+            id_u22 AS contract_id,
+            base_salary AS contract_base_salary,
+            branch_office_id AS contract_branch_office_id,
+            code_u10 AS contract_code,
+            color_status AS contract_color_status,
+            current_version AS contract_current_version,
+            employee_id AS contract_employee_id,
+            ended_at AS contract_ended_at,
+            number_hours AS contract_hours,
+            progressive_vacation_at AS contract_progressive_vacation_at,
+            progressive_vacation_months AS contract_progressive_vacation_months,
+            sindicated AS contract_sindicated,
+            term AS contract_term,
+            __KEY_data
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_data);
+
+        [contract_area]:
+        LOAD
+            code AS contract_area_code,
+            name AS contract_area_name,
+            __FK_area_contract AS __KEY_data
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_area_contract);
+
+        [contract_company]:
+        LOAD
+            identifier AS contract_company_identifier,
+            name_u0 AS contract_company_name,
+            __FK_company AS __KEY_data
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_company);
+
+        [contract_cost_center_contracts]:
+        LOAD
+            percentage AS contract_cost_center_percentage,
+            __KEY_cost_center_contracts,
+            __FK_cost_center_contracts AS __KEY_data
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_cost_center_contracts);
+
+        [contract_cost_center]:
+        LOAD
+            name_u1 AS contract_cost_center_name,
+            reference AS contract_cost_center_reference,
+            __FK_cost_center_contract AS __KEY_cost_center_contracts
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_cost_center_contract);
+
+        [employee_contract]:
+        LOAD
+            company_email AS contract_employee_company_email,
+            position_id AS contract_employee_position_id,
+            position_name AS contract_employee_position_name,
+            __KEY_employee_contract,
+            __FK_employee_contract AS __KEY_data
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_employee_contract);
+
+        [employee_person_contract]:
+        LOAD
+            birthdate AS contract_employee_birthdate,
+            civil_status AS contract_employee_civil_status,
+            document_issuing_country AS contract_employee_doc_country,
+            document_type AS contract_employee_doc_type,
+            email_u0 AS contract_employee_person_email,
+            gender AS contract_employee_gender,
+            identifier_u0 AS contract_employee_identifier,
+            lastname AS contract_employee_lastname,
+            middle_name AS contract_employee_middle_name,
+            mothers_name AS contract_employee_mothers_name,
+            name_u8 AS contract_employee_name,
+            nationality AS contract_employee_nationality,
+            retired_type AS contract_employee_retired_type,
+            __KEY_person_contract,
+            __FK_person_contract AS __KEY_employee_contract
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_person_contract);
+
+        [employee_person_area_contract]:
+        LOAD
+            code_u3 AS contract_employee_area_code,
+            name_u5 AS contract_employee_area_name,
+            __FK_area_person_contract AS __KEY_person_contract
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_area_person_contract);
+
+        [employee_privacy_contract]:
+        LOAD
+            privacy_code_u5 AS contract_employee_privacy_code,
+            privacy_name_u7 AS contract_employee_privacy_name,
+            __FK_privacy_contract AS __KEY_person_contract
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_privacy_contract);
+
+        [employee_user_contract]:
+        LOAD
+            active AS contract_employee_user_active,
+            current_country AS contract_employee_user_country,
+            joining_date AS contract_employee_joining_date,
+            username AS contract_employee_username,
+            __KEY_user_contract,
+            __FK_user_contract AS __KEY_employee_contract
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_user_contract);
+
+        [last_current_contract]:
+        LOAD
+            id_u20 AS last_contract_id,
+            base_salary_u0 AS last_contract_base_salary,
+            color_status_u0 AS last_contract_color_status,
+            created_at_u1 AS last_contract_created_at,
+            currency_u1 AS last_contract_currency,
+            description_u3 AS last_contract_description,
+            employee_id_u1 AS last_contract_employee_id,
+            number_hours_u0 AS last_contract_hours,
+            sindicated_u0 AS last_contract_sindicated,
+            started_at_u1 AS last_contract_started_at,
+            term_u0 AS last_contract_term,
+            __KEY_last_current_contract,
+            __FK_last_current_contract AS __KEY_data
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_last_current_contract);
+
+        [last_contract_area]:
+        LOAD
+            last_area_id,
+            last_area_code_u5,
+            last_area_name_u6,
+            __FK_area_last AS __KEY_last_current_contract
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_area_last);
+
+        [last_cost_center_contracts]:
+        LOAD
+            percentage_u0 AS last_cost_center_contract_percentage,
+            __KEY_cost_center_contracts_last,
+            __FK_cost_center_contracts_last AS __KEY_last_current_contract
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_cost_center_contracts_last);
+
+        [last_cost_center]:
+        LOAD
+            last_cost_center_id,
+            last_cost_center_code,
+            last_cost_center_country,
+            last_cost_center_name,
+            last_cost_center_reference,
+            __FK_cost_center_last AS __KEY_cost_center_contracts_last
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_cost_center_last);
+
+        [last_employee]:
+        LOAD
+            last_employee_id_u0,
+            last_employee_email_u0,
+            __KEY_employee_last,
+            __FK_employee_last AS __KEY_last_current_contract
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_employee_last);
+
+        [last_person]:
+        LOAD
+            last_person_id_u0,
+            last_person_birthdate_u0,
+            last_person_civil_status_u0,
+            last_person_document_country_u0,
+            last_person_document_type_u0,
+            last_person_email_u0,
+            last_person_gender_u0,
+            last_person_identifier_u0,
+            last_person_lastname_u0,
+            last_person_middle_name_u0,
+            last_person_mothers_name_u0,
+            last_person_name_u0,
+            last_person_nationality_u0,
+            __FK_person_last AS __KEY_employee_last
+        RESIDENT RestConnectorMasterTable
+        WHERE NOT IsNull(__FK_person_last);
+
+        DROP TABLE RestConnectorMasterTable;
+
+        EmployeesLastContractBatch:
+        NoConcatenate
+        LOAD *
+        RESIDENT [data]
+        WHERE Len(Trim(contract_id)) > 0;
+
+        DROP TABLE [data];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_data,
+            contract_area_code,
+            contract_area_name
+        RESIDENT [contract_area];
+        DROP TABLE [contract_area];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_data,
+            contract_company_identifier,
+            contract_company_name
+        RESIDENT [contract_company];
+        DROP TABLE [contract_company];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_data,
+            __KEY_cost_center_contracts,
+            contract_cost_center_percentage
+        RESIDENT [contract_cost_center_contracts];
+        DROP TABLE [contract_cost_center_contracts];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_cost_center_contracts,
+            contract_cost_center_name,
+            contract_cost_center_reference
+        RESIDENT [contract_cost_center];
+        DROP TABLE [contract_cost_center];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_data,
+            __KEY_employee_contract,
+            contract_employee_company_email,
+            contract_employee_position_id,
+            contract_employee_position_name
+        RESIDENT [employee_contract];
+        DROP TABLE [employee_contract];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_employee_contract,
+            __KEY_person_contract,
+            contract_employee_birthdate,
+            contract_employee_civil_status,
+            contract_employee_doc_country,
+            contract_employee_doc_type,
+            contract_employee_person_email,
+            contract_employee_gender,
+            contract_employee_identifier,
+            contract_employee_lastname,
+            contract_employee_middle_name,
+            contract_employee_mothers_name,
+            contract_employee_name,
+            contract_employee_nationality,
+            contract_employee_retired_type
+        RESIDENT [employee_person_contract];
+        DROP TABLE [employee_person_contract];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_person_contract,
+            contract_employee_area_code,
+            contract_employee_area_name
+        RESIDENT [employee_person_area_contract];
+        DROP TABLE [employee_person_area_contract];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_person_contract,
+            contract_employee_privacy_code,
+            contract_employee_privacy_name
+        RESIDENT [employee_privacy_contract];
+        DROP TABLE [employee_privacy_contract];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_employee_contract,
+            contract_employee_user_active,
+            contract_employee_user_country,
+            contract_employee_joining_date,
+            contract_employee_username,
+            __KEY_user_contract
+        RESIDENT [employee_user_contract];
+        DROP TABLE [employee_user_contract];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_data,
+            __KEY_last_current_contract,
+            last_contract_id,
+            last_contract_base_salary,
+            last_contract_color_status,
+            last_contract_created_at,
+            last_contract_currency,
+            last_contract_description,
+            last_contract_employee_id,
+            last_contract_hours,
+            last_contract_sindicated,
+            last_contract_started_at,
+            last_contract_term
+        RESIDENT [last_current_contract];
+        DROP TABLE [last_current_contract];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_last_current_contract,
+            last_area_id,
+            last_area_code_u5,
+            last_area_name_u6
+        RESIDENT [last_contract_area];
+        DROP TABLE [last_contract_area];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_last_current_contract,
+            __KEY_cost_center_contracts_last,
+            last_cost_center_contract_percentage
+        RESIDENT [last_cost_center_contracts];
+        DROP TABLE [last_cost_center_contracts];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_cost_center_contracts_last,
+            last_cost_center_id,
+            last_cost_center_code,
+            last_cost_center_country,
+            last_cost_center_name,
+            last_cost_center_reference
+        RESIDENT [last_cost_center];
+        DROP TABLE [last_cost_center];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_last_current_contract,
+            __KEY_employee_last,
+            last_employee_id_u0,
+            last_employee_email_u0
+        RESIDENT [last_employee];
+        DROP TABLE [last_employee];
+
+        LEFT JOIN (EmployeesLastContractBatch)
+        LOAD
+            __KEY_employee_last,
+            last_person_id_u0,
+            last_person_birthdate_u0,
+            last_person_civil_status_u0,
+            last_person_document_country_u0,
+            last_person_document_type_u0,
+            last_person_email_u0,
+            last_person_gender_u0,
+            last_person_identifier_u0,
+            last_person_lastname_u0,
+            last_person_middle_name_u0,
+            last_person_mothers_name_u0,
+            last_person_name_u0,
+            last_person_nationality_u0
+        RESIDENT [last_person];
+        DROP TABLE [last_person];
+
+        IF FieldNumber('__KEY_cost_center_contracts','EmployeesLastContractBatch') > 0 THEN
+            DROP FIELD __KEY_cost_center_contracts FROM EmployeesLastContractBatch;
+        ENDIF
+        IF FieldNumber('__KEY_cost_center_contracts_last','EmployeesLastContractBatch') > 0 THEN
+            DROP FIELD __KEY_cost_center_contracts_last FROM EmployeesLastContractBatch;
+        ENDIF
+        IF FieldNumber('__KEY_employee_contract','EmployeesLastContractBatch') > 0 THEN
+            DROP FIELD __KEY_employee_contract FROM EmployeesLastContractBatch;
+        ENDIF
+        IF FieldNumber('__KEY_employee_last','EmployeesLastContractBatch') > 0 THEN
+            DROP FIELD __KEY_employee_last FROM EmployeesLastContractBatch;
+        ENDIF
+        IF FieldNumber('__KEY_person_contract','EmployeesLastContractBatch') > 0 THEN
+            DROP FIELD __KEY_person_contract FROM EmployeesLastContractBatch;
+        ENDIF
+        IF FieldNumber('__KEY_last_current_contract','EmployeesLastContractBatch') > 0 THEN
+            DROP FIELD __KEY_last_current_contract FROM EmployeesLastContractBatch;
+        ENDIF
+        IF FieldNumber('__KEY_user_contract','EmployeesLastContractBatch') > 0 THEN
+            DROP FIELD __KEY_user_contract FROM EmployeesLastContractBatch;
+        ENDIF
+        IF FieldNumber('__KEY_data','EmployeesLastContractBatch') > 0 THEN
+            DROP FIELD __KEY_data FROM EmployeesLastContractBatch;
+        ENDIF
+
+        LET vRows = NoOfRows('EmployeesLastContractBatch');
+
+        IF vRows = 0 THEN
+            DROP TABLE EmployeesLastContractBatch;
+        ELSE
+            IF vTablaCreada = 0 THEN
+                EmployeesLastCurrentContract:
+                NoConcatenate
+                LOAD * RESIDENT EmployeesLastContractBatch;
+                LET vTablaCreada = 1;
+            ELSE
+                CONCATENATE (EmployeesLastCurrentContract)
+                LOAD * RESIDENT EmployeesLastContractBatch;
+            ENDIF
+
+            DROP TABLE EmployeesLastContractBatch;
+            LET vPage = vPage + 1;
+        ENDIF
+    LOOP
+
+    IF vTablaCreada = 1 THEN
+        STORE EmployeesLastCurrentContract INTO [lib://Bronce - Script - Rankmi - Diversur:DataFiles/Employees_Campos_Homologables.qvd] (qvd);
+        DROP TABLE EmployeesLastCurrentContract;
+        TRACE *** Last current contracts Rankmi guardados en QVD ***;
+    ELSE
+        TRACE *** No se recibieron datos de last current contracts Rankmi ***;
+    ENDIF
+
+    DISCONNECT;
+END SUB
