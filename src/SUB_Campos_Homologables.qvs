@@ -202,9 +202,17 @@ SUB SUB_Campos_Homologables
         LOAD
             name_u1 AS contract_cost_center_name,
             reference AS contract_cost_center_reference,
-            __FK_cost_center_contract AS __KEY_cost_center_contracts
+            __FK_cost_center_contract
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull(__FK_cost_center_contract);
+        
+        LEFT JOIN ([contract_cost_center_contracts])
+        LOAD
+            __FK_cost_center_contract AS __KEY_cost_center_contracts,
+            contract_cost_center_name,
+            contract_cost_center_reference
+        RESIDENT [contract_cost_center];
+        DROP TABLE [contract_cost_center];
 
         [employee_contract]:
         LOAD
@@ -243,6 +251,14 @@ SUB SUB_Campos_Homologables
             __FK_area_person_contract AS __KEY_person_contract
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull(__FK_area_person_contract);
+        
+        LEFT JOIN ([employee_person_contract])
+        LOAD
+            __KEY_person_contract,
+            contract_employee_area_code,
+            contract_employee_area_name
+        RESIDENT [employee_person_area_contract];
+        DROP TABLE [employee_person_area_contract];
 
         [employee_privacy_contract]:
         LOAD
@@ -251,6 +267,38 @@ SUB SUB_Campos_Homologables
             __FK_privacy_contract AS __KEY_person_contract
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull(__FK_privacy_contract);
+        
+        LEFT JOIN ([employee_person_contract])
+        LOAD
+            __KEY_person_contract,
+            contract_employee_privacy_code,
+            contract_employee_privacy_name
+        RESIDENT [employee_privacy_contract];
+        DROP TABLE [employee_privacy_contract];
+
+        LEFT JOIN ([employee_contract])
+        LOAD
+            __KEY_employee_contract,
+            __KEY_person_contract,
+            contract_employee_birthdate,
+            contract_employee_civil_status,
+            contract_employee_doc_country,
+            contract_employee_doc_type,
+            contract_employee_person_email,
+            contract_employee_gender,
+            contract_employee_identifier,
+            contract_employee_lastname,
+            contract_employee_middle_name,
+            contract_employee_mothers_name,
+            contract_employee_name,
+            contract_employee_nationality,
+            contract_employee_retired_type,
+            contract_employee_area_code,
+            contract_employee_area_name,
+            contract_employee_privacy_code,
+            contract_employee_privacy_name
+        RESIDENT [employee_person_contract];
+        DROP TABLE [employee_person_contract];
 
         [employee_user_contract]:
         LOAD
@@ -262,6 +310,17 @@ SUB SUB_Campos_Homologables
             __FK_user_contract AS __KEY_employee_contract
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull(__FK_user_contract);
+
+        LEFT JOIN ([employee_contract])
+        LOAD
+            __KEY_employee_contract,
+            contract_employee_user_active,
+            contract_employee_user_country,
+            contract_employee_joining_date,
+            contract_employee_username,
+            __KEY_user_contract
+        RESIDENT [employee_user_contract];
+        DROP TABLE [employee_user_contract];
 
         [last_current_contract]:
         LOAD
@@ -289,6 +348,15 @@ SUB SUB_Campos_Homologables
             __FK_area_last AS __KEY_last_current_contract
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull(__FK_area_last);
+        
+        LEFT JOIN ([last_current_contract])
+        LOAD
+            __KEY_last_current_contract,
+            last_area_id,
+            last_area_code_u5,
+            last_area_name_u6
+        RESIDENT [last_contract_area];
+        DROP TABLE [last_contract_area];
 
         [last_cost_center_contracts]:
         LOAD
@@ -308,6 +376,30 @@ SUB SUB_Campos_Homologables
             __FK_cost_center_last AS __KEY_cost_center_contracts_last
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull(__FK_cost_center_last);
+        
+        LEFT JOIN ([last_cost_center_contracts])
+        LOAD
+            __KEY_cost_center_contracts_last,
+            last_cost_center_id,
+            last_cost_center_code,
+            last_cost_center_country,
+            last_cost_center_name,
+            last_cost_center_reference
+        RESIDENT [last_cost_center];
+        DROP TABLE [last_cost_center];
+
+        LEFT JOIN ([last_current_contract])
+        LOAD
+            __KEY_last_current_contract,
+            __KEY_cost_center_contracts_last,
+            last_cost_center_contract_percentage,
+            last_cost_center_id,
+            last_cost_center_code,
+            last_cost_center_country,
+            last_cost_center_name,
+            last_cost_center_reference
+        RESIDENT [last_cost_center_contracts];
+        DROP TABLE [last_cost_center_contracts];
 
         [last_employee]:
         LOAD
@@ -336,6 +428,47 @@ SUB SUB_Campos_Homologables
             __FK_person_last AS __KEY_employee_last
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull(__FK_person_last);
+
+        LEFT JOIN ([last_employee])
+        LOAD
+            __KEY_employee_last,
+            last_person_id_u0,
+            last_person_birthdate_u0,
+            last_person_civil_status_u0,
+            last_person_document_country_u0,
+            last_person_document_type_u0,
+            last_person_email_u0,
+            last_person_gender_u0,
+            last_person_identifier_u0,
+            last_person_lastname_u0,
+            last_person_middle_name_u0,
+            last_person_mothers_name_u0,
+            last_person_name_u0,
+            last_person_nationality_u0
+        RESIDENT [last_person];
+        DROP TABLE [last_person];
+
+        LEFT JOIN ([last_current_contract])
+        LOAD
+            __KEY_last_current_contract,
+            __KEY_employee_last,
+            last_employee_id_u0,
+            last_employee_email_u0,
+            last_person_id_u0,
+            last_person_birthdate_u0,
+            last_person_civil_status_u0,
+            last_person_document_country_u0,
+            last_person_document_type_u0,
+            last_person_email_u0,
+            last_person_gender_u0,
+            last_person_identifier_u0,
+            last_person_lastname_u0,
+            last_person_middle_name_u0,
+            last_person_mothers_name_u0,
+            last_person_name_u0,
+            last_person_nationality_u0
+        RESIDENT [last_employee];
+        DROP TABLE [last_employee];
 
         DROP TABLE RestConnectorMasterTable;
 
@@ -373,26 +506,11 @@ SUB SUB_Campos_Homologables
 
         LEFT JOIN (EmployeesLastContractBatch)
         LOAD
-            __KEY_cost_center_contracts,
-            contract_cost_center_name,
-            contract_cost_center_reference
-        RESIDENT [contract_cost_center];
-        DROP TABLE [contract_cost_center];
-
-        LEFT JOIN (EmployeesLastContractBatch)
-        LOAD
             __KEY_data,
             __KEY_employee_contract,
             contract_employee_company_email,
             contract_employee_position_id,
-            contract_employee_position_name
-        RESIDENT [employee_contract];
-        DROP TABLE [employee_contract];
-
-        LEFT JOIN (EmployeesLastContractBatch)
-        LOAD
-            __KEY_employee_contract,
-            __KEY_person_contract,
+            contract_employee_position_name,
             contract_employee_birthdate,
             contract_employee_civil_status,
             contract_employee_doc_country,
@@ -405,36 +523,18 @@ SUB SUB_Campos_Homologables
             contract_employee_mothers_name,
             contract_employee_name,
             contract_employee_nationality,
-            contract_employee_retired_type
-        RESIDENT [employee_person_contract];
-        DROP TABLE [employee_person_contract];
-
-        LEFT JOIN (EmployeesLastContractBatch)
-        LOAD
-            __KEY_person_contract,
+            contract_employee_retired_type,
             contract_employee_area_code,
-            contract_employee_area_name
-        RESIDENT [employee_person_area_contract];
-        DROP TABLE [employee_person_area_contract];
-
-        LEFT JOIN (EmployeesLastContractBatch)
-        LOAD
-            __KEY_person_contract,
+            contract_employee_area_name,
             contract_employee_privacy_code,
-            contract_employee_privacy_name
-        RESIDENT [employee_privacy_contract];
-        DROP TABLE [employee_privacy_contract];
-
-        LEFT JOIN (EmployeesLastContractBatch)
-        LOAD
-            __KEY_employee_contract,
+            contract_employee_privacy_name,
             contract_employee_user_active,
             contract_employee_user_country,
             contract_employee_joining_date,
             contract_employee_username,
             __KEY_user_contract
-        RESIDENT [employee_user_contract];
-        DROP TABLE [employee_user_contract];
+        RESIDENT [employee_contract];
+        DROP TABLE [employee_contract];
 
         LEFT JOIN (EmployeesLastContractBatch)
         LOAD
@@ -450,50 +550,20 @@ SUB SUB_Campos_Homologables
             last_contract_hours,
             last_contract_sindicated,
             last_contract_started_at,
-            last_contract_term
-        RESIDENT [last_current_contract];
-        DROP TABLE [last_current_contract];
-
-        LEFT JOIN (EmployeesLastContractBatch)
-        LOAD
-            __KEY_last_current_contract,
+            last_contract_term,
             last_area_id,
             last_area_code_u5,
-            last_area_name_u6
-        RESIDENT [last_contract_area];
-        DROP TABLE [last_contract_area];
-
-        LEFT JOIN (EmployeesLastContractBatch)
-        LOAD
-            __KEY_last_current_contract,
+            last_area_name_u6,
             __KEY_cost_center_contracts_last,
-            last_cost_center_contract_percentage
-        RESIDENT [last_cost_center_contracts];
-        DROP TABLE [last_cost_center_contracts];
-
-        LEFT JOIN (EmployeesLastContractBatch)
-        LOAD
-            __KEY_cost_center_contracts_last,
+            last_cost_center_contract_percentage,
             last_cost_center_id,
             last_cost_center_code,
             last_cost_center_country,
             last_cost_center_name,
-            last_cost_center_reference
-        RESIDENT [last_cost_center];
-        DROP TABLE [last_cost_center];
-
-        LEFT JOIN (EmployeesLastContractBatch)
-        LOAD
-            __KEY_last_current_contract,
+            last_cost_center_reference,
             __KEY_employee_last,
             last_employee_id_u0,
-            last_employee_email_u0
-        RESIDENT [last_employee];
-        DROP TABLE [last_employee];
-
-        LEFT JOIN (EmployeesLastContractBatch)
-        LOAD
-            __KEY_employee_last,
+            last_employee_email_u0,
             last_person_id_u0,
             last_person_birthdate_u0,
             last_person_civil_status_u0,
@@ -507,8 +577,8 @@ SUB SUB_Campos_Homologables
             last_person_mothers_name_u0,
             last_person_name_u0,
             last_person_nationality_u0
-        RESIDENT [last_person];
-        DROP TABLE [last_person];
+        RESIDENT [last_current_contract];
+        DROP TABLE [last_current_contract];
 
         IF FieldNumber('__KEY_cost_center_contracts','EmployeesLastContractBatch') > 0 THEN
             DROP FIELD __KEY_cost_center_contracts FROM EmployeesLastContractBatch;
