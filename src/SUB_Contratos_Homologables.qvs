@@ -78,8 +78,8 @@ SUB SUB_Contratos_Homologables
                             "__FK_area_u0"
                         FROM "area" FK "__FK_area_u0"),
                         (SELECT 
-                            "code" AS "code_u5",
-                            "name" AS "name_u7",
+                            "code" AS "privacy_code_u5",
+                            "name" AS "privacy_name_u7",
                             "__FK_privacy"
                         FROM "privacy" FK "__FK_privacy")
                     FROM "person" PK "__KEY_person" FK "__FK_person"),
@@ -109,8 +109,8 @@ SUB SUB_Contratos_Homologables
                 FROM "last_current_contract" PK "__KEY_last_current_contract" FK "__FK_last_current_contract"),
                 (SELECT 
                     "id" AS "id_u11",
-                    "code" AS "code_u5",
-                    "name" AS "name_u6",
+                    "code" AS "last_area_code_u5",
+                    "name" AS "last_area_name_u6",
                     "__FK_area"
                 FROM "area" FK "__FK_area")
             FROM (wrap off) "data" PK "__KEY_data" FK "__FK_data")
@@ -212,8 +212,8 @@ SUB SUB_Contratos_Homologables
 
         ContractsPrivacy:
         LOAD
-            code_u5 AS privacy_code,
-            name_u7 AS privacy_name,
+            privacy_code_u5 AS privacy_code,
+            privacy_name_u7 AS privacy_name,
             __FK_privacy AS __KEY_person
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull(__FK_privacy);
@@ -250,8 +250,8 @@ SUB SUB_Contratos_Homologables
         LastContractArea:
         LOAD
             id_u11 AS last_area_id,
-            code_u5 AS last_area_code,
-            name_u6 AS last_area_name,
+            last_area_code_u5 AS last_area_code,
+            last_area_name_u6 AS last_area_name,
             __FK_area AS __KEY_last_current_contract
         RESIDENT RestConnectorMasterTable
         WHERE NOT IsNull(__FK_area);
